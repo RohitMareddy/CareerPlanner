@@ -1,0 +1,204 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}
+Profile | Career Planner
+{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+
+    <div>
+
+        <div class="page-kicker">
+            YOUR PROFILE
+        </div>
+
+        <h1>
+            {{ profile.full_name }}
+        </h1>
+
+        <p>
+            Your complete academic, career and skill profile.
+        </p>
+
+    </div>
+
+</header>
+
+
+<section class="panel">
+
+    <div class="panel-title">
+
+        <h2>Personal Information</h2>
+
+        <span>Account profile</span>
+
+    </div>
+
+
+    <div class="grid grid-2">
+
+        <div class="info-card">
+            <small>Full Name</small>
+            <strong>{{ profile.full_name }}</strong>
+        </div>
+
+        <div class="info-card">
+            <small>Username</small>
+            <strong>{{ user.username }}</strong>
+        </div>
+
+        <div class="info-card">
+            <small>College</small>
+            <strong>{{ profile.college }}</strong>
+        </div>
+
+        <div class="info-card">
+            <small>Degree</small>
+            <strong>{{ profile.degree }}</strong>
+        </div>
+
+        <div class="info-card">
+            <small>Branch</small>
+            <strong>{{ profile.branch }}</strong>
+        </div>
+
+        <div class="info-card">
+            <small>Phone</small>
+            <strong>{{ user.phone }}</strong>
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="panel">
+
+    <div class="panel-title">
+
+        <h2>Academic Journey</h2>
+
+        <span>{{ academic.current_semester }} Semester</span>
+
+    </div>
+
+
+    <div class="grid grid-3">
+
+        <div class="info-card">
+
+            <small>Current Year</small>
+
+            <strong>
+                {{ academic.current_year }}
+            </strong>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <small>Graduation</small>
+
+            <strong>
+                {{ academic.graduation_year }}
+            </strong>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <small>CGPA</small>
+
+            <strong>
+                {{ academic.cgpa if academic.cgpa else "Not provided" }}
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <div class="info-card" style="margin-top:16px;">
+
+        <small>Subjects</small>
+
+        <strong>
+            {{ academic.subjects }}
+        </strong>
+
+    </div>
+
+</section>
+
+
+<section class="panel">
+
+    <div class="panel-title">
+
+        <h2>Career Direction</h2>
+
+        <span>Destination</span>
+
+    </div>
+
+
+    <div class="info-card">
+
+        <small>Target Career</small>
+
+        <strong>
+            {{ profile.career_goal }}
+        </strong>
+
+        {% if profile.career_goal_description %}
+
+        <p>
+            {{ profile.career_goal_description }}
+        </p>
+
+        {% endif %}
+
+    </div>
+
+</section>
+
+
+<section class="panel">
+
+    <div class="panel-title">
+
+        <h2>Skills</h2>
+
+        <span>{{ skills|length }} mapped</span>
+
+    </div>
+
+
+    <div class="grid grid-3">
+
+        {% for skill in skills %}
+
+        <div class="info-card">
+
+            <small>
+                {{ skill.skill_level }}
+            </small>
+
+            <strong>
+                {{ skill.skill_name }}
+            </strong>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endblock %}

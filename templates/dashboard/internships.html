@@ -1,0 +1,79 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}
+Internships | Career Planner
+{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+
+    <div>
+
+        <div class="page-kicker">
+            REAL OPPORTUNITIES
+        </div>
+
+        <h1>
+            Find your next opportunity.
+        </h1>
+
+        <p>
+            These links take you directly to official student and
+            internship portals. We don't invent listings or deadlines.
+        </p>
+
+    </div>
+
+</header>
+
+
+<section class="panel">
+
+    <div class="panel-title">
+
+        <h2>
+            Opportunities for {{ profile.career_goal }}
+        </h2>
+
+        <span>
+            Official sources
+        </span>
+
+    </div>
+
+
+    <div class="grid grid-2">
+
+        {% for opportunity in opportunities %}
+
+        <div class="info-card">
+
+            <small>
+                {{ opportunity.type }}
+            </small>
+
+            <strong>
+                {{ opportunity.name }}
+            </strong>
+
+            <p>
+                {{ opportunity.description }}
+            </p>
+
+            <a href="{{ opportunity.url }}" target="_blank" rel="noopener noreferrer" class="action-link">
+
+                View Official Opportunity
+                →
+
+            </a>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endblock %}

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Profile | Career Planner</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/onboarding.css') }}">
+</head>
+
+<body>
+
+    <div class="onboarding-page">
+
+        <div class="ambient ambient-purple"></div>
+        <div class="ambient ambient-blue"></div>
+
+        <header class="onboarding-topbar">
+
+            <a href="{{ url_for('home') }}" class="ob-brand">
+                <span>CP</span>
+                CareerPlanner
+            </a>
+
+            <div class="step-counter">
+                <span>01</span>
+                <i>/</i>
+                05
+            </div>
+
+        </header>
+
+
+        <div class="progress-area">
+
+            <div class="progress-track">
+                <div class="progress-fill" style="width:20%;"></div>
+            </div>
+
+        </div>
+
+
+        <main class="ob-main">
+
+            <div class="ob-label">
+                STEP 01 · YOUR FOUNDATION
+            </div>
+
+            <h1>
+                Let's get to know
+                <span>you.</span>
+            </h1>
+
+            <p class="ob-subtitle">
+                Start with the basics. We'll use your academic
+                background to build a roadmap that actually fits you.
+            </p>
+
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="ob-alert">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+
+            <form method="POST" class="ob-card">
+
+                <div class="form-grid">
+
+                    <div class="field full">
+                        <label for="full_name">Full name</label>
+
+                        <input id="full_name" type="text" name="full_name" placeholder="e.g. Rohit" required>
+                    </div>
+
+
+                    <div class="field full">
+                        <label for="college">College / University</label>
+
+                        <input id="college" type="text" name="college" placeholder="e.g. VVIT" required>
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="degree">
+                            Degree
+                        </label>
+
+                        <select id="degree" name="degree" required>
+                            <option value="" selected disabled>
+                                Select degree
+                            </option>
+                            <option value="B.Tech">B.Tech</option>
+                            <option value="B.E">B.E</option>
+                            <option value="BCA">BCA</option>
+                            <option value="BBA">BBA</option>
+                            <option value="B.Com">B.Com</option>
+                            <option value="BA">BA</option>
+                            <option value="Other">Other</option>
+                        </select>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="branch">
+                            Branch / Specialization
+                        </label>
+
+                        <input id="branch" type="text" name="branch" placeholder="e.g. CSE - AI & ML" required>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-bottom">
+
+                    <div class="secure-note">
+                        <span>⌁</span>
+                        Your information stays private.
+                    </div>
+
+                    <button type="submit">
+                        Continue
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            <div class="journey">
+
+                <div class="journey-item active">
+                    <b>01</b>
+                    <span>Profile</span>
+                </div>
+
+                <i></i>
+
+                <div class="journey-item">
+                    <b>02</b>
+                    <span>Academics</span>
+                </div>
+
+                <i></i>
+
+                <div class="journey-item">
+                    <b>03</b>
+                    <span>Career</span>
+                </div>
+
+                <i></i>
+
+                <div class="journey-item">
+                    <b>04</b>
+                    <span>Skills</span>
+                </div>
+
+                <i></i>
+
+                <div class="journey-item">
+                    <b>05</b>
+                    <span>Schedule</span>
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

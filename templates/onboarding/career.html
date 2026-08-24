@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Career Goal | Career Planner</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/onboarding.css') }}">
+</head>
+
+<body>
+
+    <div class="onboarding-page">
+
+        <div class="ambient ambient-purple"></div>
+        <div class="ambient ambient-blue"></div>
+
+        <header class="onboarding-topbar">
+
+            <a href="{{ url_for('home') }}" class="ob-brand">
+                <span>CP</span>
+                CareerPlanner
+            </a>
+
+            <div class="step-counter">
+                <span>03</span>
+                <i>/</i>
+                05
+            </div>
+
+        </header>
+
+
+        <div class="progress-area">
+            <div class="progress-track">
+                <div class="progress-fill" style="width:60%;"></div>
+            </div>
+        </div>
+
+
+        <main class="ob-main">
+
+            <div class="ob-label">
+                STEP 03 · YOUR DIRECTION
+            </div>
+
+            <h1>
+                Where do you
+                <span>want to go?</span>
+            </h1>
+
+            <p class="ob-subtitle">
+                Your goal becomes the destination.
+                Career Planner will use it to understand what
+                skills and preparation you need next.
+            </p>
+
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="ob-alert">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+
+            <form method="POST" class="ob-card">
+
+                <div class="field">
+
+                    <label for="career_goal">
+                        What's your dream career?
+                    </label>
+
+                    <input id="career_goal" type="text" name="career_goal" list="career-options"
+                        placeholder="e.g. AI/ML Engineer" autocomplete="off" required>
+
+                    <datalist id="career-options">
+                        <option value="Software Engineer">
+                        <option value="AI/ML Engineer">
+                        <option value="Data Scientist">
+                        <option value="Data Analyst">
+                        <option value="Cybersecurity Engineer">
+                        <option value="Cloud Engineer">
+                        <option value="DevOps Engineer">
+                        <option value="Web Developer">
+                        <option value="Mobile App Developer">
+                        <option value="Game Developer">
+                        <option value="UI/UX Designer">
+                        <option value="Product Designer">
+                        <option value="Product Manager">
+                        <option value="Entrepreneur">
+                        <option value="Researcher">
+                    </datalist>
+
+                </div>
+
+
+                <div class="field">
+
+                    <label for="career_goal_description">
+                        Tell us a little more
+                        <small>Optional</small>
+                    </label>
+
+                    <textarea id="career_goal_description" name="career_goal_description" rows="6"
+                        placeholder="What kind of work excites you? What would you like to build?"></textarea>
+
+                </div>
+
+
+                <div class="insight-box">
+
+                    <div class="insight-icon">✦</div>
+
+                    <div>
+                        <strong>
+                            No test. No judgment.
+                        </strong>
+
+                        <p>
+                            Start with what you want.
+                            We'll help you understand how to get there.
+                        </p>
+                    </div>
+
+                </div>
+
+
+                <div class="form-bottom">
+
+                    <div class="secure-note">
+                        <span>↗</span>
+                        Your goal becomes your destination.
+                    </div>
+
+                    <button type="submit">
+                        Continue
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            <div class="journey">
+
+                <div class="journey-item completed">
+                    <b>01</b>
+                    <span>Profile</span>
+                </div>
+
+                <i></i>
+
+                <div class="journey-item completed">
+                    <b>02</b>
+                    <span>Academics</span>
+                </div>
+
+                <i></i>
+
+                <div class="journey-item active">
+                    <b>03</b>
+                    <span>Career</span>
+                </div>
+
+                <i></i>
+
+                <div class="journey-item">
+                    <b>04</b>
+                    <span>Skills</span>
+                </div>
+
+                <i></i>
+
+                <div class="journey-item">
+                    <b>05</b>
+                    <span>Schedule</span>
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,1668 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% if view == 'dashboard' %}Dashboard{% else %}{{ view|capitalize }}{% endif %} | Career Planner</title>
+    <style>
+        :root {
+            --bg: #030817;
+            --bg2: #070b1d;
+            --panel: rgba(8, 14, 34, .86);
+            --panel2: rgba(11, 18, 45, .72);
+            --line: rgba(129, 139, 255, .20);
+            --text: #f7f8ff;
+            --muted: #8d96b8;
+            --purple: #8b4dff;
+            --purple2: #c45cff;
+            --blue: #4d8dff;
+            --cyan: #35d9ff;
+            --green: #2df29b;
+            --orange: #ffad4d;
+            --danger: #ff617e;
+            --shadow: 0 20px 60px rgba(0, 0, 0, .35);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            color: var(--text);
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background:
+                radial-gradient(circle at 65% 5%, rgba(107, 48, 255, .18), transparent 30%),
+                radial-gradient(circle at 90% 45%, rgba(26, 111, 255, .10), transparent 28%),
+                linear-gradient(135deg, #020512 0%, #05091a 50%, #030611 100%);
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button,
+        input,
+        textarea {
+            font: inherit;
+        }
+
+        .app-shell {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 245px;
+            min-width: 245px;
+            min-height: 100vh;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            padding: 22px 16px;
+            border-right: 1px solid rgba(126, 136, 255, .18);
+            background: linear-gradient(180deg, rgba(4, 8, 23, .96), rgba(2, 5, 16, .98));
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 4px 9px 22px;
+        }
+
+        .brand-mark {
+            width: 42px;
+            height: 42px;
+            border-radius: 13px;
+            display: grid;
+            place-items: center;
+            font-weight: 900;
+            letter-spacing: -.04em;
+            background: linear-gradient(135deg, #7a38ff, #4d7dff);
+            box-shadow: 0 0 28px rgba(118, 65, 255, .45);
+        }
+
+        .brand-title {
+            font-weight: 900;
+            font-size: 17px;
+            line-height: 1;
+            letter-spacing: -.03em;
+        }
+
+        .brand-title span {
+            color: #a85bff;
+        }
+
+        .brand-sub {
+            color: #7883a8;
+            font-size: 10px;
+            margin-top: 5px;
+        }
+
+        .nav {
+            display: grid;
+            gap: 6px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-height: 43px;
+            padding: 0 13px;
+            color: #aeb6d2;
+            border: 1px solid transparent;
+            border-radius: 12px;
+            transition: .2s ease;
+        }
+
+        .nav-link:hover {
+            color: white;
+            background: rgba(90, 65, 190, .14);
+            border-color: rgba(126, 105, 255, .15);
+            transform: translateX(2px);
+        }
+
+        .nav-link.active {
+            color: white;
+            background: linear-gradient(100deg, rgba(116, 45, 255, .90), rgba(52, 102, 255, .70));
+            border-color: rgba(113, 158, 255, .55);
+            box-shadow: 0 8px 28px rgba(76, 65, 255, .28), inset 0 0 18px rgba(255, 255, 255, .04);
+        }
+
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+            font-size: 17px;
+        }
+
+        .nav-label {
+            font-size: 13px;
+            font-weight: 650;
+        }
+
+        .sidebar-spacer {
+            flex: 1;
+        }
+
+        .quote-card {
+            border: 1px solid rgba(140, 103, 255, .28);
+            background: radial-gradient(circle at 80% 20%, rgba(147, 63, 255, .25), transparent 35%), linear-gradient(145deg, rgba(22, 13, 61, .9), rgba(6, 12, 30, .9));
+            border-radius: 15px;
+            padding: 15px;
+            overflow: hidden;
+        }
+
+        .quote-card strong {
+            display: block;
+            font-size: 13px;
+            line-height: 1.35;
+        }
+
+        .quote-card p {
+            margin: 7px 0 0;
+            color: #8f99bb;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .logout {
+            margin-top: 9px;
+            color: #8d96b7;
+            font-size: 12px;
+            padding: 8px 10px;
+        }
+
+        .logout:hover {
+            color: #ff8097;
+        }
+
+        .main {
+            flex: 1;
+            min-width: 0;
+            padding: 24px 28px 45px;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 18px;
+            margin-bottom: 18px;
+        }
+
+        .eyebrow {
+            color: #7f89ad;
+            font-size: 11px;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            font-weight: 800;
+        }
+
+        .welcome h1 {
+            margin: 5px 0 5px;
+            font-size: clamp(25px, 3vw, 37px);
+            letter-spacing: -.045em;
+        }
+
+        .welcome h1 span {
+            color: #a95cff;
+        }
+
+        .welcome p {
+            margin: 0;
+            color: #8e98b8;
+            font-size: 12px;
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .search {
+            width: min(250px, 30vw);
+            border: 1px solid rgba(131, 144, 255, .2);
+            background: rgba(8, 13, 31, .76);
+            border-radius: 13px;
+            padding: 11px 14px;
+            color: #9ba4c4;
+            font-size: 12px;
+        }
+
+        .user-chip {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid rgba(131, 144, 255, .18);
+            border-radius: 14px;
+            padding: 7px 10px;
+            background: rgba(7, 11, 28, .72);
+        }
+
+        .avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-weight: 800;
+            background: linear-gradient(135deg, #b25cff, #386eff);
+            box-shadow: 0 0 18px rgba(125, 68, 255, .35);
+        }
+
+        .user-name {
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .user-meta {
+            color: #7882a4;
+            font-size: 10px;
+            margin-top: 2px;
+        }
+
+        .grid {
+            display: grid;
+            gap: 14px;
+        }
+
+        .metrics {
+            grid-template-columns: 1.2fr 1fr 1fr;
+        }
+
+        .card {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 16px;
+            background: linear-gradient(145deg, rgba(8, 14, 35, .92), rgba(3, 8, 23, .92));
+            box-shadow: var(--shadow);
+        }
+
+        .card-pad {
+            padding: 18px;
+        }
+
+        .goal-card {
+            background: radial-gradient(circle at 82% 20%, rgba(181, 68, 255, .24), transparent 32%), linear-gradient(145deg, rgba(24, 12, 59, .96), rgba(7, 11, 29, .95));
+        }
+
+        .metric-label {
+            color: #8791b4;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+        }
+
+        .goal-title {
+            font-size: 24px;
+            font-weight: 900;
+            margin-top: 7px;
+            letter-spacing: -.035em;
+        }
+
+        .goal-sub {
+            color: #8d97b7;
+            font-size: 11px;
+            margin-top: 5px;
+        }
+
+        .metric-number {
+            font-size: 29px;
+            font-weight: 900;
+            margin-top: 8px;
+            letter-spacing: -.04em;
+        }
+
+        .progress-line {
+            height: 6px;
+            background: #111a37;
+            border-radius: 99px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+
+        .progress-line span {
+            display: block;
+            height: 100%;
+            border-radius: 99px;
+            background: linear-gradient(90deg, #536eff, #bb55ff);
+            box-shadow: 0 0 15px rgba(126, 80, 255, .65);
+        }
+
+        .metric-foot {
+            margin-top: 9px;
+            color: #7f8aaa;
+            font-size: 10px;
+        }
+
+        .green {
+            color: var(--green);
+        }
+
+        .section {
+            margin-top: 14px;
+        }
+
+        .section-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 900;
+            letter-spacing: -.02em;
+        }
+
+        .section-link {
+            color: #a861ff;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .roadmap {
+            padding: 20px;
+        }
+
+        .roadmap-track {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            position: relative;
+            gap: 10px;
+            padding: 18px 2px 2px;
+        }
+
+        .roadmap-track:before {
+            content: "";
+            position: absolute;
+            left: 7%;
+            right: 7%;
+            top: 42px;
+            height: 2px;
+            background: linear-gradient(90deg, #2cf19b, #9b4dff, #448cff, #ff9d45, #9b4dff);
+            opacity: .75;
+        }
+
+        .stage {
+            position: relative;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .stage-dot {
+            width: 52px;
+            height: 52px;
+            margin: 0 auto 9px;
+            border-radius: 16px;
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(157, 119, 255, .45);
+            background: linear-gradient(145deg, #17103a, #0a1028);
+            box-shadow: 0 0 22px rgba(112, 68, 255, .22);
+            font-weight: 900;
+        }
+
+        .stage.done .stage-dot {
+            border-color: rgba(45, 242, 155, .7);
+            color: #2df29b;
+            box-shadow: 0 0 24px rgba(45, 242, 155, .16);
+        }
+
+        .stage.current .stage-dot {
+            border-color: rgba(194, 83, 255, .9);
+            color: #db7cff;
+            box-shadow: 0 0 28px rgba(180, 65, 255, .28);
+        }
+
+        .stage-title {
+            font-size: 11px;
+            font-weight: 850;
+        }
+
+        .stage-status {
+            color: #7f8aaa;
+            font-size: 9px;
+            margin-top: 4px;
+        }
+
+        .stage.current .stage-status {
+            color: #c76cff;
+        }
+
+        .stage.done .stage-status {
+            color: #2df29b;
+        }
+
+        .dashboard-columns {
+            display: grid;
+            grid-template-columns: 1.05fr 1fr 1fr;
+            gap: 14px;
+        }
+
+        .schedule-list,
+        .skill-list,
+        .opportunity-list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 11px 12px;
+            border: 1px solid rgba(131, 144, 255, .12);
+            border-radius: 12px;
+            background: rgba(10, 16, 37, .58);
+        }
+
+        .row-main {
+            min-width: 0;
+        }
+
+        .row-title {
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .row-sub {
+            color: #7f89aa;
+            font-size: 9px;
+            margin-top: 3px;
+        }
+
+        .row-time {
+            color: #aab4d1;
+            font-size: 9px;
+            white-space: nowrap;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 99px;
+            padding: 4px 7px;
+            font-size: 8px;
+            font-weight: 850;
+            background: rgba(130, 71, 255, .14);
+            color: #c177ff;
+            border: 1px solid rgba(157, 102, 255, .2);
+        }
+
+        .badge.green-b {
+            color: #2df29b;
+            background: rgba(45, 242, 155, .08);
+            border-color: rgba(45, 242, 155, .18);
+        }
+
+        .radar {
+            min-height: 240px;
+            display: grid;
+            place-items: center;
+        }
+
+        .radar-shape {
+            width: 170px;
+            height: 170px;
+            position: relative;
+            clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
+            background: linear-gradient(135deg, rgba(140, 74, 255, .36), rgba(45, 135, 255, .22));
+            border: 1px solid rgba(148, 91, 255, .45);
+            box-shadow: 0 0 40px rgba(112, 63, 255, .18);
+        }
+
+        .radar-shape:after {
+            content: "";
+            position: absolute;
+            inset: 24px;
+            clip-path: inherit;
+            border: 1px solid rgba(127, 151, 255, .35);
+        }
+
+        .radar-label {
+            position: absolute;
+            font-size: 9px;
+            color: #a0a9c7;
+            font-weight: 800;
+        }
+
+        .r1 {
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%)
+        }
+
+        .r2 {
+            right: -32px;
+            top: 43%;
+        }
+
+        .r3 {
+            right: -25px;
+            bottom: 8%;
+        }
+
+        .r4 {
+            left: 50%;
+            bottom: -4px;
+            transform: translateX(-50%)
+        }
+
+        .r5 {
+            left: -38px;
+            bottom: 8%;
+        }
+
+        .r6 {
+            left: -35px;
+            top: 43%;
+        }
+
+        .opportunity .company {
+            font-size: 10px;
+            font-weight: 850;
+        }
+
+        .company small {
+            display: block;
+            color: #7d87a8;
+            font-size: 9px;
+            margin-top: 2px;
+            font-weight: 500;
+        }
+
+        .empty {
+            padding: 20px;
+            text-align: center;
+            color: #7f89aa;
+            font-size: 11px;
+            border: 1px dashed rgba(130, 145, 255, .2);
+            border-radius: 13px;
+        }
+
+        .page-head {
+            margin-bottom: 15px;
+        }
+
+        .page-head h2 {
+            margin: 5px 0;
+            font-size: 29px;
+            letter-spacing: -.045em;
+        }
+
+        .page-head p {
+            margin: 0;
+            color: #8791b2;
+            font-size: 12px;
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .three-col {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .info {
+            padding: 14px;
+            border: 1px solid rgba(131, 144, 255, .13);
+            border-radius: 13px;
+            background: rgba(9, 15, 35, .65);
+        }
+
+        .info-label {
+            color: #7e89aa;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            font-weight: 800;
+        }
+
+        .info-value {
+            margin-top: 6px;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .roadmap-detail {
+            display: grid;
+            gap: 12px;
+        }
+
+        .roadmap-item {
+            display: grid;
+            grid-template-columns: 60px 1fr auto;
+            align-items: center;
+            gap: 14px;
+            padding: 16px;
+            border: 1px solid rgba(131, 144, 255, .15);
+            border-radius: 15px;
+            background: rgba(8, 14, 33, .7);
+        }
+
+        .roadmap-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 15px;
+            display: grid;
+            place-items: center;
+            font-weight: 900;
+            background: rgba(121, 67, 255, .15);
+            border: 1px solid rgba(147, 91, 255, .35);
+            color: #cb7cff;
+        }
+
+        .roadmap-item h3 {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .roadmap-item p {
+            margin: 5px 0 0;
+            color: #7f89aa;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .action {
+            color: #a85cff;
+            font-size: 10px;
+            margin-top: 6px;
+        }
+
+        .schedule-card {
+            overflow: auto;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 560px;
+        }
+
+        .table th,
+        .table td {
+            text-align: left;
+            padding: 12px;
+            border-bottom: 1px solid rgba(131, 144, 255, .11);
+            font-size: 10px;
+        }
+
+        .table th {
+            color: #7f89aa;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+        }
+
+        .resource-grid,
+        .intern-grid,
+        .achievement-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .resource-card,
+        .intern-card,
+        .achievement {
+            padding: 16px;
+            border: 1px solid rgba(131, 144, 255, .14);
+            border-radius: 15px;
+            background: linear-gradient(145deg, rgba(9, 16, 38, .82), rgba(5, 10, 26, .8));
+        }
+
+        .resource-top,
+        .intern-top,
+        .achievement-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .resource-card h3,
+        .intern-card h3,
+        .achievement h3 {
+            margin: 0;
+            font-size: 13px;
+        }
+
+        .resource-card p,
+        .intern-card p,
+        .achievement p {
+            color: #7f89aa;
+            font-size: 10px;
+            line-height: 1.55;
+            margin: 7px 0 0;
+        }
+
+        .watch,
+        .apply {
+            display: inline-flex;
+            margin-top: 13px;
+            padding: 8px 11px;
+            border-radius: 10px;
+            color: white;
+            font-size: 10px;
+            font-weight: 800;
+            background: linear-gradient(100deg, #7137ff, #3d79ff);
+        }
+
+        .skill-tag {
+            color: #a961ff;
+            font-size: 9px;
+            font-weight: 900;
+        }
+
+        .achievement.completed {
+            border-color: rgba(45, 242, 155, .22);
+        }
+
+        .achievement-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 13px;
+            display: grid;
+            place-items: center;
+            background: rgba(121, 67, 255, .14);
+            color: #c77cff;
+            font-weight: 900;
+        }
+
+        .achievement.completed .achievement-icon {
+            color: #2df29b;
+            background: rgba(45, 242, 155, .08);
+        }
+
+        .mentor {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 14px;
+        }
+
+        .mentor-panel {
+            padding: 20px;
+        }
+
+        .chat {
+            display: grid;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .bubble {
+            max-width: 80%;
+            padding: 12px 14px;
+            border-radius: 13px;
+            font-size: 11px;
+            line-height: 1.5;
+            border: 1px solid rgba(131, 144, 255, .12);
+            background: rgba(9, 15, 35, .8);
+        }
+
+        .bubble.user {
+            margin-left: auto;
+            background: linear-gradient(120deg, rgba(104, 48, 255, .8), rgba(62, 86, 255, .75));
+            border-color: rgba(161, 124, 255, .4);
+        }
+
+        .mentor-side {
+            padding: 20px;
+        }
+
+        .mentor-side ul {
+            padding-left: 17px;
+            color: #aab4d1;
+            font-size: 10px;
+            line-height: 1.9;
+        }
+
+        .settings-form {
+            display: grid;
+            gap: 10px;
+        }
+
+        .field label {
+            display: block;
+            color: #8b95b5;
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: .08em;
+            font-weight: 800;
+            margin-bottom: 6px;
+        }
+
+        .field input,
+        .field textarea {
+            width: 100%;
+            color: white;
+            background: #060c21;
+            border: 1px solid rgba(131, 144, 255, .18);
+            border-radius: 10px;
+            padding: 10px 11px;
+            outline: none;
+        }
+
+        .field textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .field input:focus,
+        .field textarea:focus {
+            border-color: rgba(153, 92, 255, .75);
+            box-shadow: 0 0 0 3px rgba(117, 65, 255, .08);
+        }
+
+        .save {
+            border: 0;
+            color: white;
+            cursor: pointer;
+            border-radius: 10px;
+            padding: 10px 14px;
+            font-weight: 800;
+            font-size: 10px;
+            background: linear-gradient(100deg, #7337ff, #3978ff);
+        }
+
+        .flash {
+            padding: 10px 12px;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            font-size: 10px;
+        }
+
+        .flash.success {
+            background: rgba(45, 242, 155, .08);
+            border: 1px solid rgba(45, 242, 155, .18);
+            color: #6ff9be;
+        }
+
+        .flash.error {
+            background: rgba(255, 97, 126, .08);
+            border: 1px solid rgba(255, 97, 126, .18);
+            color: #ff8da0;
+        }
+
+        @media (max-width: 1050px) {
+            .sidebar {
+                width: 205px;
+                min-width: 205px;
+            }
+
+            .dashboard-columns,
+            .metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .two-col,
+            .three-col,
+            .resource-grid,
+            .intern-grid,
+            .achievement-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .mentor {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .app-shell {
+                display: block;
+            }
+
+            .sidebar {
+                position: relative;
+                width: 100%;
+                min-width: 0;
+                height: auto;
+                min-height: auto;
+                border-right: 0;
+                border-bottom: 1px solid var(--line);
+            }
+
+            .nav {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .quote-card {
+                display: none;
+            }
+
+            .main {
+                padding: 18px 14px 35px;
+            }
+
+            .topbar {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .top-actions {
+                width: 100%;
+            }
+
+            .search {
+                width: 100%;
+            }
+
+            .roadmap-track {
+                grid-template-columns: 1fr;
+            }
+
+            .roadmap-track:before {
+                display: none;
+            }
+
+            .stage {
+                display: grid;
+                grid-template-columns: 52px 1fr;
+                align-items: center;
+                text-align: left;
+                gap: 12px;
+            }
+
+            .stage-dot {
+                margin: 0;
+            }
+
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .schedule-resource-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+
+            margin-top: 10px;
+            padding: 8px 13px;
+
+            border-radius: 9px;
+
+            text-decoration: none;
+
+            font-size: 12px;
+            font-weight: 600;
+
+            transition:
+                transform 0.2s ease,
+                opacity 0.2s ease;
+        }
+
+        .schedule-resource-btn:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .schedule-resource-btn span {
+            font-size: 15px;
+        }
+
+        .schedule-day-row td {
+            padding-top: 24px;
+            padding-bottom: 12px;
+        }
+
+        .schedule-description {
+            margin-top: 5px;
+            font-size: 12px;
+            opacity: 0.65;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <a class="brand" href="{{ url_for('dashboard') }}">
+                <div class="brand-mark">CP</div>
+                <div>
+                    <div class="brand-title">CAREER <span>PLANNER</span></div>
+                    <div class="brand-sub">Plan Today. Achieve Tomorrow.</div>
+                </div>
+            </a>
+
+            <nav class="nav">
+                <a class="nav-link {% if view == 'dashboard' %}active{% endif %}"
+                    href="{{ url_for('dashboard') }}"><span class="nav-icon">▦</span><span
+                        class="nav-label">Dashboard</span></a>
+                <a class="nav-link {% if view == 'profile' %}active{% endif %}"
+                    href="{{ url_for('dashboard', view='profile') }}"><span class="nav-icon">◎</span><span
+                        class="nav-label">Profile</span></a>
+                <a class="nav-link {% if view == 'roadmap' %}active{% endif %}"
+                    href="{{ url_for('dashboard', view='roadmap') }}"><span class="nav-icon">⌁</span><span
+                        class="nav-label">Roadmap</span></a>
+                <a class="nav-link {% if view == 'schedule' %}active{% endif %}"
+                    href="{{ url_for('dashboard', view='schedule') }}"><span class="nav-icon">◷</span><span
+                        class="nav-label">Schedule</span></a>
+                <a class="nav-link {% if view == 'internships' %}active{% endif %}"
+                    href="{{ url_for('dashboard', view='internships') }}"><span class="nav-icon">▣</span><span
+                        class="nav-label">Internships</span></a>
+                <a class="nav-link {% if view == 'resources' %}active{% endif %}"
+                    href="{{ url_for('dashboard', view='resources') }}"><span class="nav-icon">▶</span><span
+                        class="nav-label">Resources</span></a>
+                <a class="nav-link {% if view == 'mentor' %}active{% endif %}"
+                    href="{{ url_for('dashboard_ai_mentor') }}">
+                    <span class="nav-icon">✦</span>
+                    <span class="nav-label">JARVIS AI</span>
+                </a>
+                <a class="nav-link {% if view == 'achievements' %}active{% endif %}"
+                    href="{{ url_for('dashboard', view='achievements') }}"><span class="nav-icon">♜</span><span
+                        class="nav-label">Achievements</span></a>
+                <a class="nav-link {% if view == 'settings' %}active{% endif %}"
+                    href="{{ url_for('dashboard', view='settings') }}"><span class="nav-icon">⚙</span><span
+                        class="nav-label">Settings</span></a>
+            </nav>
+
+            <div class="sidebar-spacer"></div>
+            <div class="quote-card">
+                <strong>Small steps today,<br>limitless tomorrow.</strong>
+                <p>Keep building your skills one focused session at a time.</p>
+            </div>
+            <a class="logout" href="{{ url_for('logout') }}">↪ Log out</a>
+        </aside>
+
+        <main class="main">
+            <header class="topbar">
+                <div class="welcome">
+                    <div class="eyebrow">Career Planner</div>
+                    <h1>Welcome back, <span>{{ profile.full_name.split(' ')[0] }}</span> 👋</h1>
+                    <p>“The best way to predict the future is to create it.”</p>
+                </div>
+                <div class="top-actions">
+                    <div class="search">⌕ &nbsp; Search anything...</div>
+                    <div class="user-chip">
+                        <div class="avatar">{{ profile.full_name[0]|upper }}</div>
+                        <div>
+                            <div class="user-name">{{ profile.full_name }}</div>
+                            <div class="user-meta">{{ academic.current_semester }}, {{ profile.branch }}</div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            {% if view == 'dashboard' %}
+            <section class="grid metrics">
+                <div class="card goal-card card-pad">
+                    <div class="metric-label">Current Goal</div>
+                    <div class="goal-title">{{ profile.career_goal }}</div>
+                    <div class="goal-sub">{{ profile.career_goal_description or 'Build the skills that move you toward
+                        your target.' }}</div>
+                </div>
+                <div class="card card-pad">
+                    <div class="metric-label">Overall Progress</div>
+                    <div class="metric-number">{{ progress }}%</div>
+                    <div class="progress-line"><span style="width:{{ progress }}%"></span></div>
+                    <div class="metric-foot"><span class="green">↑</span> Profile + skills completion</div>
+                </div>
+                <div class="card card-pad">
+                    <div class="metric-label">Study Plan</div>
+                    <div class="metric-number">{{ availability.study_hours }} hrs</div>
+                    <div class="metric-foot">Daily target · {{ availability.study_start }} – {{ availability.study_end
+                        }}</div>
+                </div>
+            </section>
+
+            <section class="section card roadmap">
+                <div class="section-head">
+                    <div class="section-title">YOUR ROADMAP</div>
+                    <a class="section-link" href="{{ url_for('dashboard', view='roadmap') }}">View Full Roadmap →</a>
+                </div>
+                <div class="roadmap-track">
+                    {% for stage in roadmap %}
+                    <div
+                        class="stage {% if stage.status == 'Completed' %}done{% elif stage.status == 'In Progress' %}current{% endif %}">
+                        <div class="stage-dot">{% if stage.status == 'Completed' %}✓{% else %}{{ stage.number }}{% endif
+                            %}</div>
+                        <div>
+                            <div class="stage-title">{{ stage.title }}</div>
+                            <div class="stage-status">{{ stage.status }}{% if stage.status == 'In Progress' %} · {{
+                                stage.percent }}%{% endif %}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <section class="section dashboard-columns">
+                <div class="card card-pad">
+                    <div class="section-head">
+                        <div class="section-title">TODAY'S SCHEDULE</div><a class="section-link"
+                            href="{{ url_for('dashboard', view='schedule') }}">View All</a>
+                    </div>
+                    <div class="schedule-list">
+                        {% for item in today_schedule[:5] %}
+                        <div class="row">
+                            <div class="row-main">
+                                <div class="row-title">{{ item.title }}</div>
+                                <div class="row-sub">{% if item.kind == 'college' %}College{% else %}Focused learning{%
+                                    endif %}</div>
+                            </div>
+                            <div class="row-time">{{ item.time }}</div>
+                        </div>
+                        {% else %}<div class="empty">No schedule found.</div>{% endfor %}
+                    </div>
+                </div>
+
+                <div class="card card-pad">
+                    <div class="section-head">
+                        <div class="section-title">SKILLS OVERVIEW</div><a class="section-link"
+                            href="{{ url_for('dashboard', view='skills') }}">View All</a>
+                    </div>
+                    <div class="skill-list">
+                        {% for skill in skills[:6] %}
+                        <div class="row">
+                            <div class="row-title">{{ skill.skill_name }}</div><span class="badge">{{ skill.skill_level
+                                }}</span>
+                        </div>
+                        {% else %}<div class="empty">No skills mapped yet.</div>{% endfor %}
+                    </div>
+                </div>
+
+                <div class="card card-pad">
+                    <div class="section-head">
+                        <div class="section-title">TOP OPPORTUNITIES</div><a class="section-link"
+                            href="{{ url_for('dashboard', view='internships') }}">View All</a>
+                    </div>
+                    <div class="opportunity-list">
+                        {% for opportunity in opportunities[:3] %}
+                        <a class="row opportunity" href="{{ opportunity.url }}" target="_blank"
+                            rel="noopener noreferrer">
+                            <div class="company">{{ opportunity.name }}<small>{{ opportunity.type }}</small></div>
+                            <span class="badge green-b">OPEN</span>
+                        </a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+
+            <section class="section two-col">
+                <div class="card card-pad">
+                    <div class="section-head">
+                        <div class="section-title">SKILLS TO LEARN THIS WEEK</div><a class="section-link"
+                            href="{{ url_for('dashboard', view='resources') }}">Resources →</a>
+                    </div>
+                    <div class="skill-list">
+                        {% for resource in weekly_resources %}
+                        <a class="row" href="{{ resource.url }}" target="_blank" rel="noopener noreferrer">
+                            <div class="row-main">
+                                <div class="row-title">{{ resource.skill }}</div>
+                                <div class="row-sub">{{ resource.title }}</div>
+                            </div><span class="badge">YouTube</span>
+                        </a>
+                        {% else %}<div class="empty">Your selected skills are already strong. Add more skills from
+                            onboarding or Settings.</div>{% endfor %}
+                    </div>
+                </div>
+                <div class="card card-pad">
+                    <div class="section-head">
+                        <div class="section-title">CAREER SNAPSHOT</div><a class="section-link"
+                            href="{{ url_for('dashboard', view='profile') }}">Open Profile →</a>
+                    </div>
+                    <div class="profile-grid">
+                        <div class="info">
+                            <div class="info-label">College</div>
+                            <div class="info-value">{{ profile.college }}</div>
+                        </div>
+                        <div class="info">
+                            <div class="info-label">Degree</div>
+                            <div class="info-value">{{ profile.degree }}</div>
+                        </div>
+                        <div class="info">
+                            <div class="info-label">Year</div>
+                            <div class="info-value">{{ academic.current_year }}</div>
+                        </div>
+                        <div class="info">
+                            <div class="info-label">CGPA</div>
+                            <div class="info-value">{{ academic.cgpa if academic.cgpa is not none else 'Not provided' }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {% elif view == 'profile' %}
+            <div class="page-head">
+                <div class="eyebrow">YOUR INFORMATION</div>
+                <h2>Full Profile</h2>
+                <p>Everything you entered during onboarding, in one place.</p>
+            </div>
+            <div class="two-col">
+                <section class="card card-pad">
+                    <div class="section-title">Personal Details</div>
+                    <div class="profile-grid" style="margin-top:12px">
+                        <div class="info">
+                            <div class="info-label">Full Name</div>
+                            <div class="info-value">{{ profile.full_name }}</div>
+                        </div>
+                        <div class="info">
+                            <div class="info-label">Username</div>
+                            <div class="info-value">{{ user.username }}</div>
+                        </div>
+                        <div class="info">
+                            <div class="info-label">Phone</div>
+                            <div class="info-value">{{ user.phone }}</div>
+                        </div>
+                        <div class="info">
+                            <div class="info-label">College</div>
+                            <div class="info-value">{{ profile.college }}</div>
+                        </div>
+                        <div class="info">
+                            <div class="info-label">Degree</div>
+                            <div class="info-value">{{ profile.degree }}</div>
+                        </div>
+                        <div class="info">
+                            <div class="info-label">Branch</div>
+                            <div class="info-value">{{ profile.branch }}</div>
+                        </div>
+                    </div>
+                </section>
+                <section class="card card-pad">
+                    <div class="section-title">Academic Details</div>
+                    <div class="profile-grid" style="margin-top:12px">
+                        <div class="info">
+                            <div class="info-label">Current Year</div>
+                            <div class="info-value">{{ academic.current_year }}</div>
+                        </div>
+                        <div class="info">
+                            <div class="info-label">Semester</div>
+                            <div class="info-value">{{ academic.current_semester }}</div>
+                        </div>
+                        <div class="info">
+                            <div class="info-label">Graduation</div>
+                            <div class="info-value">{{ academic.graduation_year }}</div>
+                        </div>
+                        <div class="info">
+                            <div class="info-label">CGPA</div>
+                            <div class="info-value">{{ academic.cgpa if academic.cgpa is not none else 'Not provided' }}
+                            </div>
+                        </div>
+                        <div class="info" style="grid-column:1/-1">
+                            <div class="info-label">Subjects</div>
+                            <div class="info-value">{{ academic.subjects }}</div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            <section class="section card card-pad">
+                <div class="section-head">
+                    <div class="section-title">Career Direction</div><a class="section-link"
+                        href="{{ url_for('dashboard', view='settings') }}">Edit in Settings →</a>
+                </div>
+                <div class="info">
+                    <div class="info-label">Goal</div>
+                    <div class="info-value">{{ profile.career_goal }}</div>
+                    <div class="row-sub" style="margin-top:8px">{{ profile.career_goal_description or 'No description
+                        provided.' }}</div>
+                </div>
+            </section>
+
+            {% elif view == 'roadmap' %}
+            <div class="page-head">
+                <div class="eyebrow">YOUR CAREER JOURNEY</div>
+                <h2>Full Roadmap</h2>
+                <p>A personalized path based on your career goal, skills and current progress.</p>
+            </div>
+            <div class="roadmap-detail">
+                {% for stage in roadmap %}
+                <div class="roadmap-item">
+                    <div class="roadmap-number">{{ stage.number }}</div>
+                    <div>
+                        <h3>{{ stage.title }}</h3>
+                        <p>{{ stage.description }}</p>
+                        <div class="action">Next move: {{ stage.action }}</div>
+                    </div>
+                    <div class="badge {% if stage.status == 'Completed' %}green-b{% endif %}">{{ stage.status }}{% if
+                        stage.status == 'In Progress' %} · {{ stage.percent }}%{% endif %}</div>
+                </div>
+                {% endfor %}
+            </div>
+
+            {% elif view == 'schedule' %}
+            <div class="page-head">
+                <div class="eyebrow">YOUR TIME, ORGANIZED</div>
+                <h2>Study Schedule</h2>
+                <p>Generated from the exact college and study timings you gave during onboarding.</p>
+            </div>
+            <div class="two-col">
+                <section class="card card-pad">
+                    <div class="section-title">Your Availability</div>
+                    <div class="profile-grid" style="margin-top:12px">
+                        <div class="info">
+                            <div class="info-label">College</div>
+                            <div class="info-value">{{ availability.college_start }} – {{ availability.college_end }}
+                            </div>
+                        </div>
+                        <div class="info">
+                            <div class="info-label">Study Window</div>
+                            <div class="info-value">{{ availability.study_start }} – {{ availability.study_end }}</div>
+                        </div>
+                        <div class="info">
+                            <div class="info-label">Daily Study Target</div>
+                            <div class="info-value">{{ availability.study_hours }} hours</div>
+                        </div>
+                        <div class="info">
+                            <div class="info-label">Weekend Mode</div>
+                            <div class="info-value">{{ availability.weekend_mode }}</div>
+                        </div>
+                    </div>
+                </section>
+                <section class="card card-pad">
+                    <div class="section-title">Subjects Used</div>
+                    <div class="skill-list" style="margin-top:12px">{% for subject in subjects %}<div class="row">
+                            <div class="row-title">{{ subject }}</div><span class="badge">Subject</span>
+                        </div>{% endfor %}</div>
+                </section>
+            </div>
+            <section class="section card card-pad schedule-card">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Activity</th>
+                            <th>Type</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for day, day_schedule in schedule.items() %}
+
+                        <!-- DAY HEADER -->
+
+                        <tr class="schedule-day-row">
+                            <td colspan="3">
+                                <strong>{{ day }}</strong>
+                            </td>
+                        </tr>
+
+
+                        <!-- DAY'S SCHEDULE -->
+
+                        {% for item in day_schedule %}
+
+                        <tr>
+
+                            <td>
+                                {{ item.time }}
+                            </td>
+
+                            <td>
+
+                                <strong>
+                                    {{ item.title }}
+                                </strong>
+
+                                {% if item.kind == "college" %}
+
+                                <div class="schedule-description">
+                                    College / academic time
+                                </div>
+
+                                {% elif item.kind == "study" %}
+
+                                <div class="schedule-description">
+                                    Focused academic study block
+                                </div>
+
+                                {% elif item.kind == "skills" %}
+
+                                <div class="schedule-description">
+                                    {{ item.description }}
+                                </div>
+
+                                <a href="{{ item.resource_url }}" class="schedule-resource-btn">
+                                    Explore Resources
+                                    <span>→</span>
+                                </a>
+
+                                {% endif %}
+
+                            </td>
+
+                            <td>
+
+                                {% if item.kind == "college" %}
+
+                                <span class="schedule-type college">
+                                    College
+                                </span>
+
+                                {% elif item.kind == "study" %}
+
+                                <span class="schedule-type study">
+                                    Study
+                                </span>
+
+                                {% elif item.kind == "skills" %}
+
+                                <span class="schedule-type skills">
+                                    Other Skills
+                                </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                        {% endfor %}
+
+                    </tbody>
+                </table>
+            </section>
+
+            {% elif view == 'internships' %}
+            <div class="page-head">
+                <div class="eyebrow">REAL OPPORTUNITIES</div>
+                <h2>Internships & Opportunities</h2>
+                <p>These cards open the current opportunity portals directly. Availability depends on each organization.
+                </p>
+            </div>
+            <div class="intern-grid">{% for opportunity in opportunities %}<article class="intern-card">
+                    <div class="intern-top">
+                        <div>
+                            <h3>{{ opportunity.name }}</h3>
+                            <div class="skill-tag" style="margin-top:5px">{{ opportunity.type }}</div>
+                        </div><span class="badge green-b">PORTAL</span>
+                    </div>
+                    <p>{{ opportunity.description }}</p><a class="apply" href="{{ opportunity.url }}" target="_blank"
+                        rel="noopener noreferrer">Open Opportunity ↗</a>
+                </article>{% endfor %}</div>
+
+            {% elif view == 'resources' %}
+            <div class="page-head">
+                <div class="eyebrow">LEARNING HUB</div>
+                <h2>Resources</h2>
+                <p>Skills to learn this week, with direct YouTube learning links selected from your career direction and
+                    current skill levels.</p>
+            </div>
+            <section class="card card-pad">
+                <div class="section-head">
+                    <div class="section-title">SKILLS TO LEARN THIS WEEK</div><span class="badge">{{
+                        weekly_resources|length }} focused resources</span>
+                </div>
+                <div class="resource-grid">{% for resource in weekly_resources %}<article class="resource-card">
+                        <div class="resource-top">
+                            <div>
+                                <div class="skill-tag">{{ resource.skill }}</div>
+                                <h3 style="margin-top:6px">{{ resource.title }}</h3>
+                            </div><span class="badge">YouTube</span>
+                        </div>
+                        <p>{{ resource.description }}</p>
+                        <div class="row-sub" style="margin-top:8px">{{ resource.channel }}</div><a class="watch"
+                            href="{{ resource.url }}" target="_blank" rel="noopener noreferrer">Watch / Learn ↗</a>
+                    </article>{% else %}<div class="empty" style="grid-column:1/-1">No weekly resources are available
+                        for the current selection.</div>{% endfor %}</div>
+            </section>
+            <section class="section card card-pad">
+                <div class="section-head">
+                    <div class="section-title">YOUR MAPPED SKILLS</div><a class="section-link"
+                        href="{{ url_for('dashboard', view='skills') }}">Open Skills →</a>
+                </div>
+                <div class="skill-list">{% for skill in skills %}<div class="row">
+                        <div class="row-title">{{ skill.skill_name }}</div><span class="badge">{{ skill.skill_level
+                            }}</span>
+                    </div>{% endfor %}</div>
+            </section>
+
+            {% elif view == 'skills' %}
+            <div class="page-head">
+                <div class="eyebrow">YOUR DEVELOPMENT</div>
+                <h2>My Skills</h2>
+                <p>Your current skill profile and self-assessed levels.</p>
+            </div>
+            <div class="three-col">{% for skill in skills %}<div class="card card-pad">
+                    <div class="skill-tag">CURRENT PROFICIENCY</div>
+                    <h3 style="margin:7px 0;font-size:16px">{{ skill.skill_name }}</h3><span
+                        class="badge {% if skill.skill_level in ['Advanced','Expert'] %}green-b{% endif %}">{{
+                        skill.skill_level }}</span>
+                    <div class="progress-line" style="margin-top:13px"><span
+                            style="width:{% if skill.skill_level == 'Beginner' %}25{% elif skill.skill_level == 'Basic' %}40{% elif skill.skill_level == 'Intermediate' %}65{% elif skill.skill_level == 'Advanced' %}90{% else %}100{% endif %}%"></span>
+                    </div>
+                </div>{% endfor %}</div>
+
+            {% elif view == 'mentor' %}
+            <div class="page-head">
+                <div class="eyebrow">PERSONAL CAREER GUIDE</div>
+                <h2>AI Mentor</h2>
+                <p>A contextual mentor view based on your saved profile, skills and career goal.</p>
+            </div>
+            <div class="mentor">
+                <section class="card mentor-panel">
+                    <div class="section-title">Career Mentor</div>
+                    <div class="chat">
+                        <div class="bubble">Hi {{ profile.full_name.split(' ')[0] }}! Your current direction is
+                            <strong>{{ profile.career_goal }}</strong>.
+                        </div>
+                        <div class="bubble">Your immediate focus should be: <strong>{{ weekly_skills|join(', ') if
+                                weekly_skills else 'your core skills' }}</strong>.</div>
+                        <div class="bubble user">What should I focus on this week?</div>
+                        <div class="bubble">Use the Resources page to complete the three focused learning items, then
+                            use your Schedule page to protect the study blocks. After that, start a small project that
+                            proves what you learned.</div>
+                    </div>
+                </section>
+                <aside class="card mentor-side">
+                    <div class="section-title">Your Context</div>
+                    <ul>
+                        <li>Goal: {{ profile.career_goal }}</li>
+                        <li>Progress: {{ progress }}%</li>
+                        <li>Skills mapped: {{ skills|length }}</li>
+                        <li>Daily study target: {{ availability.study_hours }} hrs</li>
+                    </ul>
+                </aside>
+            </div>
+
+            {% elif view == 'achievements' %}
+            <div class="page-head">
+                <div class="eyebrow">MILESTONES</div>
+                <h2>Achievements</h2>
+                <p>Progress badges generated from your real profile data.</p>
+            </div>
+            <div class="achievement-grid">{% for achievement in achievements %}<article
+                    class="achievement {% if achievement.completed %}completed{% endif %}">
+                    <div class="achievement-top">
+                        <div class="achievement-icon">{{ achievement.icon }}</div><span
+                            class="badge {% if achievement.completed %}green-b{% endif %}">{% if achievement.completed
+                            %}UNLOCKED{% else %}LOCKED{% endif %}</span>
+                    </div>
+                    <h3 style="margin-top:14px">{{ achievement.title }}</h3>
+                    <p>{{ achievement.description }}</p>
+                </article>{% endfor %}</div>
+
+            {% elif view == 'settings' %}
+            <div class="page-head">
+                <div class="eyebrow">CONTROL CENTER</div>
+                <h2>Settings</h2>
+                <p>Modify the important information used by Career Planner.</p>
+            </div>
+            <div class="two-col">
+                <section class="card card-pad">
+                    <div class="section-title">Edit Profile</div>
+                    <form class="settings-form" method="POST" action="{{ url_for('dashboard', view='settings') }}"
+                        style="margin-top:13px"><input type="hidden" name="action" value="profile">
+                        <div class="field"><label>Full Name</label><input name="full_name"
+                                value="{{ profile.full_name }}" required></div>
+                        <div class="field"><label>College</label><input name="college" value="{{ profile.college }}"
+                                required></div>
+                        <div class="field"><label>Degree</label><input name="degree" value="{{ profile.degree }}"
+                                required></div>
+                        <div class="field"><label>Branch</label><input name="branch" value="{{ profile.branch }}"
+                                required></div><button class="save" type="submit">Save Profile</button>
+                    </form>
+                </section>
+                <section class="card card-pad">
+                    <div class="section-title">Career Goal</div>
+                    <form class="settings-form" method="POST" action="{{ url_for('dashboard', view='settings') }}"
+                        style="margin-top:13px"><input type="hidden" name="action" value="career">
+                        <div class="field"><label>Career Goal</label><input name="career_goal"
+                                value="{{ profile.career_goal }}" required></div>
+                        <div class="field"><label>Description</label><textarea
+                                name="career_goal_description">{{ profile.career_goal_description or '' }}</textarea>
+                        </div><button class="save" type="submit">Save Career Goal</button>
+                    </form>
+                </section>
+            </div>
+            <section class="section card card-pad">
+                <div class="section-title">Change Password</div>
+                <form class="settings-form" method="POST" action="{{ url_for('dashboard', view='settings') }}"
+                    style="margin-top:13px;max-width:600px"><input type="hidden" name="action" value="password">
+                    <div class="field"><label>Current Password</label><input type="password" name="old_password"
+                            required></div>
+                    <div class="field"><label>New Password</label><input type="password" name="new_password"
+                            minlength="6" required></div>
+                    <div class="field"><label>Confirm New Password</label><input type="password" name="confirm_password"
+                            minlength="6" required></div><button class="save" type="submit">Update Password</button>
+                </form>
+            </section>
+            {% endif %}
+        </main>
+    </div>
+</body>
+
+</html>

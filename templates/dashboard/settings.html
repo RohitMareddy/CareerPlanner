@@ -1,0 +1,234 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}
+Settings | Career Planner
+{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+
+    <div>
+
+        <div class="page-kicker">
+            ACCOUNT SETTINGS
+        </div>
+
+        <h1>
+            Settings.
+        </h1>
+
+        <p>
+            Update the information Career Planner uses to personalize your experience.
+        </p>
+
+    </div>
+
+</header>
+
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+
+{% if messages %}
+
+{% for category, message in messages %}
+
+<div class="panel">
+
+    <div class="{% if category == 'success' %}success{% else %}warning{% endif %}">
+        {{ message }}
+    </div>
+
+</div>
+
+{% endfor %}
+
+{% endif %}
+
+{% endwith %}
+
+
+<section class="panel">
+
+    <div class="panel-title">
+
+        <h2>
+            Personal Profile
+        </h2>
+
+    </div>
+
+
+    <form method="POST">
+
+        <input type="hidden" name="action" value="profile">
+
+
+        <div class="grid grid-2">
+
+            <div class="form-group">
+
+                <label>
+                    Full Name
+                </label>
+
+                <input type="text" name="full_name" value="{{ profile.full_name }}" required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    College
+                </label>
+
+                <input type="text" name="college" value="{{ profile.college }}" required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Degree
+                </label>
+
+                <input type="text" name="degree" value="{{ profile.degree }}" required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>
+                    Branch
+                </label>
+
+                <input type="text" name="branch" value="{{ profile.branch }}" required>
+
+            </div>
+
+        </div>
+
+
+        <button class="primary-btn" type="submit">
+
+            Save Profile
+
+        </button>
+
+    </form>
+
+</section>
+
+
+<section class="panel">
+
+    <div class="panel-title">
+
+        <h2>
+            Career Direction
+        </h2>
+
+    </div>
+
+
+    <form method="POST">
+
+        <input type="hidden" name="action" value="career">
+
+
+        <div class="form-group">
+
+            <label>
+                Career Goal
+            </label>
+
+            <input type="text" name="career_goal" value="{{ profile.career_goal }}" required>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Description
+            </label>
+
+            <textarea name="career_goal_description">{{ profile.career_goal_description or "" }}</textarea>
+
+        </div>
+
+
+        <button class="primary-btn" type="submit">
+
+            Update Career Goal
+
+        </button>
+
+    </form>
+
+</section>
+
+
+<section class="panel">
+
+    <div class="panel-title">
+
+        <h2>
+            Change Password
+        </h2>
+
+    </div>
+
+
+    <form method="POST">
+
+        <input type="hidden" name="action" value="password">
+
+
+        <div class="form-group">
+
+            <label>
+                Current Password
+            </label>
+
+            <input type="password" name="old_password" required>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                New Password
+            </label>
+
+            <input type="password" name="new_password" required>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Confirm New Password
+            </label>
+
+            <input type="password" name="confirm_password" required>
+
+        </div>
+
+
+        <button class="primary-btn" type="submit">
+
+            Update Password
+
+        </button>
+
+    </form>
+
+</section>
+
+{% endblock %}

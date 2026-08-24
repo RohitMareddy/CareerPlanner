@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Academics | Career Planner</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/onboarding.css') }}">
+</head>
+
+<body>
+
+    <div class="onboarding-page">
+
+        <div class="ambient ambient-purple"></div>
+        <div class="ambient ambient-blue"></div>
+
+        <header class="onboarding-topbar">
+
+            <a href="{{ url_for('home') }}" class="ob-brand">
+                <span>CP</span>
+                CareerPlanner
+            </a>
+
+            <div class="step-counter">
+                <span>02</span>
+                <i>/</i>
+                05
+            </div>
+
+        </header>
+
+
+        <div class="progress-area">
+            <div class="progress-track">
+                <div class="progress-fill" style="width:40%;"></div>
+            </div>
+        </div>
+
+
+        <main class="ob-main">
+
+            <div class="ob-label">
+                STEP 02 · ACADEMIC JOURNEY
+            </div>
+
+            <h1>
+                Where are you
+                <span>right now?</span>
+            </h1>
+
+            <p class="ob-subtitle">
+                Your academic stage helps Career Planner understand
+                your current workload and the time you have ahead.
+            </p>
+
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="ob-alert">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+
+            <form method="POST" class="ob-card">
+
+                <div class="form-grid">
+
+                    <div class="field">
+
+                        <label for="current_year">
+                            Current year
+                        </label>
+
+                        <select id="current_year" name="current_year" required>
+
+                            <option value="" selected disabled>
+                                Select year
+                            </option>
+
+                            <option value="1st Year">1st Year</option>
+                            <option value="2nd Year">2nd Year</option>
+                            <option value="3rd Year">3rd Year</option>
+                            <option value="4th Year">4th Year</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="current_semester">
+                            Current semester
+                        </label>
+
+                        <select id="current_semester" name="current_semester" required>
+
+                            <option value="" selected disabled>
+                                Select semester
+                            </option>
+
+                            <option value="1st Semester">1st Semester</option>
+                            <option value="2nd Semester">2nd Semester</option>
+                            <option value="3rd Semester">3rd Semester</option>
+                            <option value="4th Semester">4th Semester</option>
+                            <option value="5th Semester">5th Semester</option>
+                            <option value="6th Semester">6th Semester</option>
+                            <option value="7th Semester">7th Semester</option>
+                            <option value="8th Semester">8th Semester</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="graduation_year">
+                            Graduation year
+                        </label>
+
+                        <input id="graduation_year" type="number" name="graduation_year" placeholder="e.g. 2029"
+                            min="2026" max="2040" required>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="cgpa">
+                            Current CGPA
+                            <small>Optional</small>
+                        </label>
+
+                        <input id="cgpa" type="number" name="cgpa" placeholder="e.g. 8.2" min="0" max="10" step="0.01">
+
+                    </div>
+
+
+                    <div class="field full">
+
+                        <label for="subjects">
+                            Current subjects
+                        </label>
+
+                        <textarea id="subjects" name="subjects" rows="4"
+                            placeholder="e.g. Java, DSA, DBMS, Computer Architecture..." required></textarea>
+
+                    </div>
+
+
+                    <div class="field full">
+
+                        <label for="academic_challenges">
+                            Academic challenges
+                            <small>Optional</small>
+                        </label>
+
+                        <textarea id="academic_challenges" name="academic_challenges" rows="3"
+                            placeholder="What subjects, concepts or habits are difficult for you?"></textarea>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-bottom">
+
+                    <div class="secure-note">
+                        <span>◈</span>
+                        We'll use this to understand your workload.
+                    </div>
+
+                    <button type="submit">
+                        Continue
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            <div class="journey">
+
+                <div class="journey-item completed">
+                    <b>01</b>
+                    <span>Profile</span>
+                </div>
+
+                <i></i>
+
+                <div class="journey-item active">
+                    <b>02</b>
+                    <span>Academics</span>
+                </div>
+
+                <i></i>
+
+                <div class="journey-item">
+                    <b>03</b>
+                    <span>Career</span>
+                </div>
+
+                <i></i>
+
+                <div class="journey-item">
+                    <b>04</b>
+                    <span>Skills</span>
+                </div>
+
+                <i></i>
+
+                <div class="journey-item">
+                    <b>05</b>
+                    <span>Schedule</span>
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

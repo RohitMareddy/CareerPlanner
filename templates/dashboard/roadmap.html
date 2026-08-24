@@ -1,0 +1,96 @@
+-->{% extends "dashboard/base.html" %}
+{% block title %}
+Roadmap | Career Planner
+{% endblock %}
+{% block content %}
+<header class="page-header">
+    <div>
+
+        <div class="page-kicker">
+            YOUR CAREER ROADMAP
+        </div>
+
+        <h1>
+            From where you are to
+            {{ profile.career_goal }}.
+        </h1>
+
+        <p>
+            A practical sequence based on your current profile,
+            academic journey and skills.
+        </p>
+
+    </div>
+</header>
+<section class="panel">
+    <div class="roadmap-list">
+
+        {% for item in roadmap %}
+
+        <div class="roadmap-item">
+
+            <div class="roadmap-number">
+                {{ item.number }}
+            </div>
+
+            <div>
+
+                <h3>
+                    {{ item.title }}
+                </h3>
+
+                <p>
+                    {{ item.description }}
+                </p>
+
+                <p>
+                    <strong>
+                        Next:
+                    </strong>
+
+                    {{ item.action }}
+                </p>
+
+            </div>
+
+            <div class="status">
+                {{ item.status }}
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+</section>
+<section class="panel">
+    <div class="panel-title">
+
+        <h2>Your Current Skill Position</h2>
+
+        <span>Based on your self-assessment</span>
+
+    </div>
+
+
+    <div class="grid grid-3">
+
+        {% for skill in skills %}
+
+        <div class="info-card">
+
+            <small>
+                {{ skill.skill_level }}
+            </small>
+
+            <strong>
+                {{ skill.skill_name }}
+            </strong>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+</section>
+{% endblock %}.

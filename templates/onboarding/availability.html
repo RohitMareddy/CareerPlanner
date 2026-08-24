@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Availability | Career Planner</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/onboarding.css') }}">
+
+</head>
+
+<body>
+
+    <div class="onboarding-page">
+
+        <div class="ambient ambient-purple"></div>
+        <div class="ambient ambient-blue"></div>
+
+
+        <header class="onboarding-topbar">
+
+            <a href="{{ url_for('home') }}" class="ob-brand">
+                <span>CP</span>
+                CareerPlanner
+            </a>
+
+            <div class="step-counter">
+                <span>05</span>
+                <i>/</i>
+                05
+            </div>
+
+        </header>
+
+
+        <div class="progress-area">
+
+            <div class="progress-track">
+                <div class="progress-fill" style="width:100%;"></div>
+            </div>
+
+        </div>
+
+
+        <main class="ob-main">
+
+            <div class="ob-label">
+                STEP 05 · YOUR AVAILABILITY
+            </div>
+
+            <h1>
+                When can you
+                <span>make progress?</span>
+            </h1>
+
+            <p class="ob-subtitle">
+                Tell us when you're actually available.
+                We'll use your college hours, free time and study
+                preferences to build a timetable that fits your life.
+            </p>
+
+
+            <form method="POST" class="ob-card">
+
+                <div class="section-title">
+                    <span>01</span>
+
+                    <div>
+                        <strong>College schedule</strong>
+                        <small>When are you normally in college?</small>
+                    </div>
+                </div>
+
+
+                <div class="form-grid">
+
+                    <div class="field">
+
+                        <label for="college_start">
+                            College starts
+                        </label>
+
+                        <input id="college_start" type="time" name="college_start" required>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="college_end">
+                            College ends
+                        </label>
+
+                        <input id="college_end" type="time" name="college_end" required>
+
+                    </div>
+
+                </div>
+
+
+                <div class="section-title second">
+
+                    <span>02</span>
+
+                    <div>
+                        <strong>Study window</strong>
+                        <small>When do you prefer to study?</small>
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <div class="field">
+
+                        <label for="study_start">
+                            Preferred start
+                        </label>
+
+                        <input id="study_start" type="time" name="study_start" required>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="study_end">
+                            Preferred end
+                        </label>
+
+                        <input id="study_end" type="time" name="study_end" required>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="study_hours">
+                            Target study hours / day
+                        </label>
+
+                        <select id="study_hours" name="study_hours" required>
+
+                            <option value="" selected disabled>
+                                Select hours
+                            </option>
+
+                            <option value="1">1 hour</option>
+                            <option value="2">2 hours</option>
+                            <option value="3">3 hours</option>
+                            <option value="4">4 hours</option>
+                            <option value="5">5 hours</option>
+                            <option value="6">6+ hours</option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="field">
+
+                        <label for="weekend_mode">
+                            Weekend preference
+                        </label>
+
+                        <select id="weekend_mode" name="weekend_mode" required>
+
+                            <option value="normal">
+                                Normal study
+                            </option>
+
+                            <option value="intensive">
+                                Intensive study
+                            </option>
+
+                            <option value="light">
+                                Light study
+                            </option>
+
+                            <option value="rest">
+                                Mostly rest
+                            </option>
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <div class="insight-box">
+
+                    <div class="insight-icon">◷</div>
+
+                    <div>
+
+                        <strong>
+                            Your timetable won't fight your life.
+                        </strong>
+
+                        <p>
+                            Career Planner will prioritize college,
+                            available time, career goals and study load
+                            when generating your schedule.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-bottom">
+
+                    <div class="secure-note">
+                        <span>✦</span>
+                        Final step. Your roadmap is almost ready.
+                    </div>
+
+                    <button type="submit">
+                        Build My Plan
+                        <span>→</span>
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            <div class="journey">
+
+                <div class="journey-item completed">
+                    <b>01</b>
+                    <span>Profile</span>
+                </div>
+
+                <i></i>
+
+                <div class="journey-item completed">
+                    <b>02</b>
+                    <span>Academics</span>
+                </div>
+
+                <i></i>
+
+                <div class="journey-item completed">
+                    <b>03</b>
+                    <span>Career</span>
+                </div>
+
+                <i></i>
+
+                <div class="journey-item completed">
+                    <b>04</b>
+                    <span>Skills</span>
+                </div>
+
+                <i></i>
+
+                <div class="journey-item active">
+                    <b>05</b>
+                    <span>Schedule</span>
+                </div>
+
+            </div>
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

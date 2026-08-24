@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Career Planner | Build Your Future</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div class="page-bg">
+        <div class="bg-orb orb-purple"></div>
+        <div class="bg-orb orb-blue"></div>
+        <div class="bg-grid"></div>
+    </div>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+        <a href="{{ url_for('home') }}" class="brand">
+            <span class="brand-mark">CP</span>
+
+            <span class="brand-name">
+                Career<span>Planner</span>
+            </span>
+        </a>
+
+        <div class="nav-links">
+            <a href="#how-it-works">How it works</a>
+            <a href="#features">Features</a>
+            <a href="#why">Why Career Planner</a>
+        </div>
+
+        <div class="nav-actions">
+            <a href="{{ url_for('login') }}" class="login-link">
+                Log in
+            </a>
+
+            <a href="{{ url_for('signup') }}" class="nav-cta">
+                Get Started
+                <span>→</span>
+            </a>
+        </div>
+
+    </nav>
+
+
+    <!-- HERO -->
+
+    <main class="hero">
+
+        <div class="hero-badge">
+            <span class="badge-dot"></span>
+            Your future, intelligently planned
+        </div>
+
+        <h1>
+            Don't just dream.
+            <span>Build your path.</span>
+        </h1>
+
+        <p class="hero-description">
+            Career Planner turns your ambitions, academics and skills
+            into a structured roadmap designed around
+            <strong>your journey.</strong>
+        </p>
+
+        <div class="hero-actions">
+
+            <a href="{{ url_for('signup') }}" class="primary-cta">
+                Build My Career Plan
+                <span>→</span>
+            </a>
+
+            <a href="#how-it-works" class="secondary-cta">
+                See how it works
+            </a>
+
+        </div>
+
+        <div class="hero-meta">
+            <span>✦</span>
+            Built for ambitious students
+            <i></i>
+            From first year to final year
+        </div>
+
+
+        <!-- PRODUCT PREVIEW -->
+
+        <section class="product-preview">
+
+            <div class="window-bar">
+
+                <div class="window-controls">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+
+                <div class="window-title">
+                    Career Planner
+                </div>
+
+                <div class="window-status">
+                    ● LIVE
+                </div>
+
+            </div>
+
+
+            <div class="preview-layout">
+
+                <aside class="preview-sidebar">
+
+                    <div class="preview-logo">CP</div>
+
+                    <div class="preview-nav active">
+                        <span>⌂</span>
+                    </div>
+
+                    <div class="preview-nav">
+                        <span>◈</span>
+                    </div>
+
+                    <div class="preview-nav">
+                        <span>✓</span>
+                    </div>
+
+                    <div class="preview-nav">
+                        <span>◷</span>
+                    </div>
+
+                </aside>
+
+
+                <div class="preview-main">
+
+                    <div class="preview-header">
+
+                        <div>
+                            <small>MONDAY · AUGUST 18</small>
+
+                            <h2>
+                                Good morning, Rohit.
+                            </h2>
+                        </div>
+
+                        <div class="avatar">
+                            R
+                        </div>
+
+                    </div>
+
+
+                    <div class="readiness-card">
+
+                        <div class="readiness-copy">
+
+                            <small>CAREER READINESS</small>
+
+                            <strong>
+                                72<span>%</span>
+                            </strong>
+
+                            <p>
+                                You're building strong momentum.
+                            </p>
+
+                        </div>
+
+                        <div class="readiness-ring">
+                            <div>72%</div>
+                        </div>
+
+                    </div>
+
+
+                    <div class="preview-stats">
+
+                        <div class="preview-stat">
+                            <small>THIS WEEK</small>
+                            <strong>14.5h</strong>
+                            <span>Study planned</span>
+                        </div>
+
+                        <div class="preview-stat">
+                            <small>SKILLS</small>
+                            <strong>08 / 12</strong>
+                            <span>Career skills</span>
+                        </div>
+
+                        <div class="preview-stat">
+                            <small>STREAK</small>
+                            <strong>12 🔥</strong>
+                            <span>Days active</span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="preview-bottom">
+
+                        <div>
+                            <small>TODAY'S FOCUS</small>
+                            <strong>Java · DSA Practice</strong>
+                        </div>
+
+                        <span class="focus-status">
+                            09:00 AM
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- HOW IT WORKS -->
+
+    <section class="section" id="how-it-works">
+
+        <div class="section-heading">
+
+            <span>THE PROCESS</span>
+
+            <h2>
+                From ambition to
+                <em>action.</em>
+            </h2>
+
+            <p>
+                Career Planner understands where you are,
+                where you want to go, and helps build the bridge.
+            </p>
+
+        </div>
+
+
+        <div class="process-grid">
+
+            <article class="process-card">
+                <span class="process-number">01</span>
+
+                <div class="process-icon">◎</div>
+
+                <h3>Tell us about you</h3>
+
+                <p>
+                    Your academic journey, background and
+                    current situation become the foundation.
+                </p>
+            </article>
+
+
+            <article class="process-card">
+                <span class="process-number">02</span>
+
+                <div class="process-icon">◇</div>
+
+                <h3>Define your direction</h3>
+
+                <p>
+                    Choose your career destination and identify
+                    the skills required to reach it.
+                </p>
+            </article>
+
+
+            <article class="process-card">
+                <span class="process-number">03</span>
+
+                <div class="process-icon">↗</div>
+
+                <h3>Build your roadmap</h3>
+
+                <p>
+                    Turn everything into a practical schedule
+                    you can actually follow.
+                </p>
+            </article>
+
+        </div>
+
+    </section>
+
+
+    <!-- FEATURES -->
+
+    <section class="section features-section" id="features">
+
+        <div class="section-heading left">
+
+            <span>ONE PLATFORM</span>
+
+            <h2>
+                Everything your
+                <em>career journey</em> needs.
+            </h2>
+
+        </div>
+
+
+        <div class="feature-grid">
+
+            <div class="feature-card large">
+                <span class="feature-label">ROADMAP</span>
+                <h3>Know what to learn next.</h3>
+                <p>
+                    Stop guessing which skill, technology or
+                    subject deserves your attention.
+                </p>
+                <div class="feature-visual roadmap-lines">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+
+
+            <div class="feature-card">
+                <span class="feature-label">SCHEDULE</span>
+                <h3>Study around your life.</h3>
+                <p>
+                    Your timetable considers college,
+                    availability and priorities.
+                </p>
+            </div>
+
+
+            <div class="feature-card">
+                <span class="feature-label">PROGRESS</span>
+                <h3>See yourself improving.</h3>
+                <p>
+                    Track skills, study consistency and
+                    career readiness.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- FINAL CTA -->
+
+    <section class="final-cta" id="why">
+
+        <span>YOUR NEXT CHAPTER</span>
+
+        <h2>
+            Your ambition deserves
+            <strong>a roadmap.</strong>
+        </h2>
+
+        <p>
+            Start with where you are.
+            We'll help you figure out what's next.
+        </p>
+
+        <a href="{{ url_for('signup') }}" class="primary-cta">
+            Start Planning
+            <span>→</span>
+        </a>
+
+    </section>
+
+
+    <footer>
+        <div class="footer-brand">
+            <span class="brand-mark">CP</span>
+            CareerPlanner
+        </div>
+
+        <span>
+            © 2026 Career Planner
+        </span>
+    </footer>
+
+</body>
+
+</html>

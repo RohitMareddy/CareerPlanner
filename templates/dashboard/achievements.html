@@ -1,0 +1,65 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}
+Achievements | Career Planner
+{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+
+    <div>
+
+        <div class="page-kicker">
+            YOUR PROGRESS MILESTONES
+        </div>
+
+        <h1>
+            Achievements.
+        </h1>
+
+        <p>
+            Milestones are unlocked from things you've actually completed
+            inside Career Planner.
+        </p>
+
+    </div>
+
+</header>
+
+
+<section class="panel">
+
+    <div class="grid grid-2">
+
+        {% for achievement in achievements %}
+
+        <div class="info-card">
+
+            <small class="{% if achievement.completed %}success{% else %}warning{% endif %}">
+
+                {% if achievement.completed %}
+                UNLOCKED
+                {% else %}
+                IN PROGRESS
+                {% endif %}
+
+            </small>
+
+            <strong>
+                {{ achievement.title }}
+            </strong>
+
+            <p>
+                {{ achievement.description }}
+            </p>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endblock %}

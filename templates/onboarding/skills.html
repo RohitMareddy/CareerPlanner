@@ -1,0 +1,1268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Skills | Career Planner</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                sans-serif;
+
+            color: #ffffff;
+
+            background:
+                radial-gradient(circle at 15% 10%,
+                    rgba(120, 60, 255, 0.22),
+                    transparent 30%),
+                radial-gradient(circle at 85% 90%,
+                    rgba(0, 120, 255, 0.16),
+                    transparent 30%),
+                #030617;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 30px;
+        }
+
+
+        .page {
+            width: min(1100px, 100%);
+        }
+
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+
+        .eyebrow {
+            color: #9f8cff;
+            font-size: 14px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+
+            margin-bottom: 8px;
+        }
+
+
+        h1 {
+            font-size: clamp(34px, 5vw, 54px);
+            line-height: 1.05;
+            margin-bottom: 12px;
+        }
+
+
+        .subtitle {
+            color: #a8afc7;
+            font-size: 16px;
+            max-width: 700px;
+            line-height: 1.6;
+        }
+
+
+        .progress-wrap {
+            margin-top: 25px;
+        }
+
+
+        .progress-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            color: #9299b3;
+            font-size: 13px;
+
+            margin-bottom: 9px;
+        }
+
+
+        .progress {
+            width: 100%;
+            height: 7px;
+
+            background: #11182d;
+
+            border-radius: 100px;
+
+            overflow: hidden;
+        }
+
+
+        .progress-bar {
+            width: 80%;
+            height: 100%;
+
+            background:
+                linear-gradient(90deg,
+                    #7b2cff,
+                    #9d5cff,
+                    #35a7ff);
+
+            border-radius: inherit;
+        }
+
+
+        .card {
+            background:
+                linear-gradient(145deg,
+                    rgba(17, 23, 51, 0.92),
+                    rgba(7, 10, 27, 0.96));
+
+            border: 1px solid rgba(112, 93, 255, 0.22);
+
+            border-radius: 22px;
+
+            padding: 28px;
+
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.35);
+
+            backdrop-filter: blur(20px);
+        }
+
+
+        .card-title {
+            font-size: 21px;
+            font-weight: 700;
+
+            margin-bottom: 6px;
+        }
+
+
+        .card-description {
+            color: #8f97b2;
+            font-size: 14px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .skills-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fit,
+                    minmax(280px, 1fr));
+
+            gap: 15px;
+        }
+
+
+        .skill-card {
+            position: relative;
+
+            padding: 19px;
+
+            border-radius: 17px;
+
+            border: 1px solid #1b2342;
+
+            background:
+                rgba(8, 12, 30, 0.82);
+
+            transition:
+                border-color 0.2s ease,
+                transform 0.2s ease,
+                background 0.2s ease;
+        }
+
+
+        .skill-card:hover {
+            border-color: rgba(139, 92, 246, 0.65);
+
+            background:
+                rgba(20, 16, 48, 0.9);
+
+            transform: translateY(-2px);
+        }
+
+
+        .skill-top {
+            display: flex;
+
+            align-items: center;
+
+            gap: 13px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .checkbox-wrap {
+            width: 23px;
+            height: 23px;
+
+            position: relative;
+
+            flex-shrink: 0;
+        }
+
+
+        .checkbox-wrap input {
+            width: 23px;
+            height: 23px;
+
+            appearance: none;
+
+            border: 1px solid #394265;
+
+            border-radius: 7px;
+
+            background: #0b1024;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        .checkbox-wrap input:checked {
+            background:
+                linear-gradient(135deg,
+                    #7b2cff,
+                    #4f8cff);
+
+            border-color: #8b5cf6;
+        }
+
+
+        .checkbox-wrap input:checked::after {
+            content: "✓";
+
+            position: absolute;
+
+            left: 6px;
+            top: 1px;
+
+            color: white;
+
+            font-size: 16px;
+            font-weight: 800;
+        }
+
+
+        .skill-name {
+            font-size: 17px;
+            font-weight: 700;
+        }
+
+
+        .skill-icon {
+            margin-left: auto;
+
+            width: 36px;
+            height: 36px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 11px;
+
+            background:
+                rgba(124, 58, 237, 0.12);
+
+            color: #b58cff;
+        }
+
+
+        .level-label {
+            display: block;
+
+            color: #747d9d;
+
+            font-size: 12px;
+            font-weight: 600;
+
+            margin-bottom: 7px;
+        }
+
+
+        .level-select {
+            width: 100%;
+
+            padding: 11px 12px;
+
+            border-radius: 11px;
+
+            border: 1px solid #20294a;
+
+            background: #090e22;
+
+            color: white;
+
+            outline: none;
+
+            cursor: pointer;
+        }
+
+
+        .level-select:focus {
+            border-color: #7c3aed;
+        }
+
+
+        .custom-section {
+            margin-top: 25px;
+
+            padding-top: 25px;
+
+            border-top:
+                1px solid #1b2340;
+        }
+
+
+        .custom-label {
+            display: block;
+
+            font-size: 14px;
+            font-weight: 700;
+
+            margin-bottom: 8px;
+        }
+
+
+        .custom-help {
+            color: #727b98;
+
+            font-size: 12px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .custom-input {
+            width: 100%;
+
+            padding: 14px 15px;
+
+            border-radius: 12px;
+
+            border: 1px solid #20294a;
+
+            background: #090e22;
+
+            color: white;
+
+            outline: none;
+
+            font-size: 14px;
+        }
+
+
+        .custom-input::placeholder {
+            color: #555f7c;
+        }
+
+
+        .custom-input:focus {
+            border-color: #7c3aed;
+        }
+
+
+        .actions {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            margin-top: 30px;
+        }
+
+
+        .back-btn,
+        .continue-btn {
+            border: none;
+
+            text-decoration: none;
+
+            border-radius: 13px;
+
+            padding: 14px 23px;
+
+            font-size: 14px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+        }
+
+
+        .back-btn {
+            color: #9ca5c0;
+
+            background: #0d1329;
+
+            border: 1px solid #20294a;
+        }
+
+
+        .continue-btn {
+            color: white;
+
+            background:
+                linear-gradient(135deg,
+                    #7427ff,
+                    #4b8dff);
+
+            box-shadow:
+                0 12px 30px rgba(104, 55, 255, 0.25);
+        }
+
+
+        .continue-btn:hover {
+            filter: brightness(1.1);
+        }
+
+
+        .existing {
+            margin-top: 20px;
+
+            color: #69728f;
+
+            font-size: 12px;
+        }
+
+
+        .flash {
+            margin-bottom: 20px;
+
+            padding: 13px 15px;
+
+            border-radius: 12px;
+
+            background:
+                rgba(239, 68, 68, 0.1);
+
+            border:
+                1px solid rgba(239, 68, 68, 0.3);
+
+            color: #ff9b9b;
+
+            font-size: 14px;
+        }
+
+
+        @media (max-width: 700px) {
+
+            body {
+                padding: 18px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .actions {
+                flex-direction: column-reverse;
+                align-items: stretch;
+            }
+
+            .back-btn,
+            .continue-btn {
+                text-align: center;
+                width: 100%;
+            }
+
+        }
+    </style>
+
+</head>
+
+
+<body>
+
+    <div class="page">
+
+
+        <!-- HEADER -->
+
+        <div class="header">
+
+            <div class="eyebrow">
+                Step 04 of 05
+            </div>
+
+            <h1>
+                Build your skill profile.
+            </h1>
+
+            <p class="subtitle">
+                Tell Career Planner what you already know.
+                Your skill levels will be used to personalize
+                your roadmap, weekly learning resources and
+                career recommendations.
+            </p>
+
+
+            <div class="progress-wrap">
+
+                <div class="progress-top">
+
+                    <span>
+                        Your onboarding progress
+                    </span>
+
+                    <span>
+                        80%
+                    </span>
+
+                </div>
+
+
+                <div class="progress">
+
+                    <div class="progress-bar"></div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- FLASH MESSAGES -->
+
+        {% with messages = get_flashed_messages(
+        with_categories=true
+        ) %}
+
+        {% if messages %}
+
+        {% for category, message in messages %}
+
+        <div class="flash">
+            {{ message }}
+        </div>
+
+        {% endfor %}
+
+        {% endif %}
+
+        {% endwith %}
+
+
+        <!-- SKILL FORM -->
+
+        <form method="POST" action="{{ url_for('onboarding_skills') }}">
+
+            <div class="card">
+
+                <div class="card-title">
+                    What skills do you have?
+                </div>
+
+                <div class="card-description">
+                    Select everything you have studied or practiced,
+                    then choose your current level.
+                </div>
+
+
+                <div class="skills-grid">
+
+
+                    <!-- C -->
+
+                    <div class="skill-card">
+
+                        <div class="skill-top">
+
+                            <div class="checkbox-wrap">
+
+                                <input type="checkbox" name="skills" value="C" id="skill-c" {% if existing_skills and
+                                    existing_skills |selectattr( 'skill_name' , 'equalto' , 'C' ) |list %} checked {%
+                                    endif %}>
+
+                            </div>
+
+                            <label for="skill-c" class="skill-name">
+                                C
+                            </label>
+
+                            <div class="skill-icon">
+                                C
+                            </div>
+
+                        </div>
+
+
+                        <label class="level-label">
+                            Current level
+                        </label>
+
+                        <select name="level_C" class="level-select">
+
+                            {% for level in [
+                            "Beginner",
+                            "Basic",
+                            "Intermediate",
+                            "Advanced",
+                            "Expert"
+                            ] %}
+
+                            <option value="{{ level }}" {% for item in existing_skills %} {% if item.skill_name=="C" and
+                                item.skill_level==level %} selected {% endif %} {% endfor %}>
+                                {{ level }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- C++ -->
+
+                    <div class="skill-card">
+
+                        <div class="skill-top">
+
+                            <div class="checkbox-wrap">
+
+                                <input type="checkbox" name="skills" value="C++" id="skill-cpp" {% if existing_skills
+                                    and existing_skills |selectattr( 'skill_name' , 'equalto' , 'C++' ) |list %} checked
+                                    {% endif %}>
+
+                            </div>
+
+                            <label for="skill-cpp" class="skill-name">
+                                C++
+                            </label>
+
+                            <div class="skill-icon">
+                                C++
+                            </div>
+
+                        </div>
+
+
+                        <label class="level-label">
+                            Current level
+                        </label>
+
+                        <select name="level_C++" class="level-select">
+
+                            {% for level in [
+                            "Beginner",
+                            "Basic",
+                            "Intermediate",
+                            "Advanced",
+                            "Expert"
+                            ] %}
+
+                            <option value="{{ level }}">
+                                {{ level }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Python -->
+
+                    <div class="skill-card">
+
+                        <div class="skill-top">
+
+                            <div class="checkbox-wrap">
+
+                                <input type="checkbox" name="skills" value="Python" id="skill-python" {% if
+                                    existing_skills and existing_skills |selectattr( 'skill_name' , 'equalto' , 'Python'
+                                    ) |list %} checked {% endif %}>
+
+                            </div>
+
+                            <label for="skill-python" class="skill-name">
+                                Python
+                            </label>
+
+                            <div class="skill-icon">
+                                Py
+                            </div>
+
+                        </div>
+
+
+                        <label class="level-label">
+                            Current level
+                        </label>
+
+                        <select name="level_Python" class="level-select">
+
+                            {% for level in [
+                            "Beginner",
+                            "Basic",
+                            "Intermediate",
+                            "Advanced",
+                            "Expert"
+                            ] %}
+
+                            <option value="{{ level }}">
+                                {{ level }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Java -->
+
+                    <div class="skill-card">
+
+                        <div class="skill-top">
+
+                            <div class="checkbox-wrap">
+
+                                <input type="checkbox" name="skills" value="Java" id="skill-java">
+
+                            </div>
+
+                            <label for="skill-java" class="skill-name">
+                                Java
+                            </label>
+
+                            <div class="skill-icon">
+                                ☕
+                            </div>
+
+                        </div>
+
+
+                        <label class="level-label">
+                            Current level
+                        </label>
+
+                        <select name="level_Java" class="level-select">
+
+                            {% for level in [
+                            "Beginner",
+                            "Basic",
+                            "Intermediate",
+                            "Advanced",
+                            "Expert"
+                            ] %}
+
+                            <option value="{{ level }}">
+                                {{ level }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- SQL -->
+
+                    <div class="skill-card">
+
+                        <div class="skill-top">
+
+                            <div class="checkbox-wrap">
+
+                                <input type="checkbox" name="skills" value="SQL" id="skill-sql">
+
+                            </div>
+
+                            <label for="skill-sql" class="skill-name">
+                                SQL
+                            </label>
+
+                            <div class="skill-icon">
+                                DB
+                            </div>
+
+                        </div>
+
+
+                        <label class="level-label">
+                            Current level
+                        </label>
+
+                        <select name="level_SQL" class="level-select">
+
+                            {% for level in [
+                            "Beginner",
+                            "Basic",
+                            "Intermediate",
+                            "Advanced",
+                            "Expert"
+                            ] %}
+
+                            <option value="{{ level }}">
+                                {{ level }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- HTML -->
+
+                    <div class="skill-card">
+
+                        <div class="skill-top">
+
+                            <div class="checkbox-wrap">
+
+                                <input type="checkbox" name="skills" value="HTML" id="skill-html">
+
+                            </div>
+
+                            <label for="skill-html" class="skill-name">
+                                HTML
+                            </label>
+
+                            <div class="skill-icon">
+                                &lt;/&gt;
+                            </div>
+
+                        </div>
+
+
+                        <label class="level-label">
+                            Current level
+                        </label>
+
+                        <select name="level_HTML" class="level-select">
+
+                            {% for level in [
+                            "Beginner",
+                            "Basic",
+                            "Intermediate",
+                            "Advanced",
+                            "Expert"
+                            ] %}
+
+                            <option value="{{ level }}">
+                                {{ level }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- CSS -->
+
+                    <div class="skill-card">
+
+                        <div class="skill-top">
+
+                            <div class="checkbox-wrap">
+
+                                <input type="checkbox" name="skills" value="CSS" id="skill-css">
+
+                            </div>
+
+                            <label for="skill-css" class="skill-name">
+                                CSS
+                            </label>
+
+                            <div class="skill-icon">
+                                #
+                            </div>
+
+                        </div>
+
+
+                        <label class="level-label">
+                            Current level
+                        </label>
+
+                        <select name="level_CSS" class="level-select">
+
+                            {% for level in [
+                            "Beginner",
+                            "Basic",
+                            "Intermediate",
+                            "Advanced",
+                            "Expert"
+                            ] %}
+
+                            <option value="{{ level }}">
+                                {{ level }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- JavaScript -->
+
+                    <div class="skill-card">
+
+                        <div class="skill-top">
+
+                            <div class="checkbox-wrap">
+
+                                <input type="checkbox" name="skills" value="JavaScript" id="skill-js">
+
+                            </div>
+
+                            <label for="skill-js" class="skill-name">
+                                JavaScript
+                            </label>
+
+                            <div class="skill-icon">
+                                JS
+                            </div>
+
+                        </div>
+
+
+                        <label class="level-label">
+                            Current level
+                        </label>
+
+                        <select name="level_JavaScript" class="level-select">
+
+                            {% for level in [
+                            "Beginner",
+                            "Basic",
+                            "Intermediate",
+                            "Advanced",
+                            "Expert"
+                            ] %}
+
+                            <option value="{{ level }}">
+                                {{ level }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- React -->
+
+                    <div class="skill-card">
+
+                        <div class="skill-top">
+
+                            <div class="checkbox-wrap">
+
+                                <input type="checkbox" name="skills" value="React" id="skill-react">
+
+                            </div>
+
+                            <label for="skill-react" class="skill-name">
+                                React
+                            </label>
+
+                            <div class="skill-icon">
+                                ⚛
+                            </div>
+
+                        </div>
+
+
+                        <label class="level-label">
+                            Current level
+                        </label>
+
+                        <select name="level_React" class="level-select">
+
+                            {% for level in [
+                            "Beginner",
+                            "Basic",
+                            "Intermediate",
+                            "Advanced",
+                            "Expert"
+                            ] %}
+
+                            <option value="{{ level }}">
+                                {{ level }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Git -->
+
+                    <div class="skill-card">
+
+                        <div class="skill-top">
+
+                            <div class="checkbox-wrap">
+
+                                <input type="checkbox" name="skills" value="Git" id="skill-git">
+
+                            </div>
+
+                            <label for="skill-git" class="skill-name">
+                                Git & GitHub
+                            </label>
+
+                            <div class="skill-icon">
+                                Git
+                            </div>
+
+                        </div>
+
+
+                        <label class="level-label">
+                            Current level
+                        </label>
+
+                        <select name="level_Git" class="level-select">
+
+                            {% for level in [
+                            "Beginner",
+                            "Basic",
+                            "Intermediate",
+                            "Advanced",
+                            "Expert"
+                            ] %}
+
+                            <option value="{{ level }}">
+                                {{ level }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- DSA -->
+
+                    <div class="skill-card">
+
+                        <div class="skill-top">
+
+                            <div class="checkbox-wrap">
+
+                                <input type="checkbox" name="skills" value="Data Structures" id="skill-dsa">
+
+                            </div>
+
+                            <label for="skill-dsa" class="skill-name">
+                                Data Structures
+                            </label>
+
+                            <div class="skill-icon">
+                                DS
+                            </div>
+
+                        </div>
+
+
+                        <label class="level-label">
+                            Current level
+                        </label>
+
+                        <select name="level_Data Structures" class="level-select">
+
+                            {% for level in [
+                            "Beginner",
+                            "Basic",
+                            "Intermediate",
+                            "Advanced",
+                            "Expert"
+                            ] %}
+
+                            <option value="{{ level }}">
+                                {{ level }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- Machine Learning -->
+
+                    <div class="skill-card">
+
+                        <div class="skill-top">
+
+                            <div class="checkbox-wrap">
+
+                                <input type="checkbox" name="skills" value="Machine Learning" id="skill-ml">
+
+                            </div>
+
+                            <label for="skill-ml" class="skill-name">
+                                Machine Learning
+                            </label>
+
+                            <div class="skill-icon">
+                                ML
+                            </div>
+
+                        </div>
+
+
+                        <label class="level-label">
+                            Current level
+                        </label>
+
+                        <select name="level_Machine Learning" class="level-select">
+
+                            {% for level in [
+                            "Beginner",
+                            "Basic",
+                            "Intermediate",
+                            "Advanced",
+                            "Expert"
+                            ] %}
+
+                            <option value="{{ level }}">
+                                {{ level }}
+                            </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CUSTOM SKILLS -->
+
+                <div class="custom-section">
+
+                    <label class="custom-label" for="custom-skills">
+                        Other skills
+                    </label>
+
+                    <p class="custom-help">
+                        Add skills not listed above.
+                        Separate multiple skills with commas.
+                    </p>
+
+                    <input class="custom-input" id="custom-skills" type="text" name="custom_skills"
+                        placeholder="Example: Figma, Docker, TensorFlow">
+
+                </div>
+
+
+                <!-- ACTIONS -->
+
+                <div class="actions">
+
+                    <a class="back-btn" href="{{ url_for('onboarding_career') }}">
+                        ← Back
+                    </a>
+
+
+                    <button type="submit" class="continue-btn">
+                        Continue to Availability →
+                    </button>
+
+                </div>
+
+
+                {% if existing_skills %}
+
+                <div class="existing">
+
+                    {{ existing_skills|length }}
+                    skill{{ "" if existing_skills|length == 1 else "s" }}
+                    currently saved.
+
+                </div>
+
+                {% endif %}
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <script>
+
+        /*
+         * Prevent selecting a skill with an invalid
+         * empty level. Also gives a small visual cue.
+         */
+
+        document.querySelectorAll(
+            'input[name="skills"]'
+        ).forEach(function (checkbox) {
+
+            checkbox.addEventListener(
+                "change",
+                function () {
+
+                    const card =
+                        checkbox.closest(".skill-card");
+
+                    if (!card) return;
+
+                    if (checkbox.checked) {
+
+                        card.style.borderColor =
+                            "rgba(139, 92, 246, 0.65)";
+
+                    } else {
+
+                        card.style.borderColor =
+                            "#1b2342";
+
+                    }
+
+                }
+            );
+
+        });
+
+    </script>
+
+</body>
+
+</html>

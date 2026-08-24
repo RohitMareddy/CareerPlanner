@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}Career Planner{% endblock %}</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard-pages.css') }}">
+
+</head>
+
+<body>
+
+    <div class="dashboard-shell">
+
+        <aside class="dashboard-sidebar">
+
+            <a href="{{ url_for('dashboard') }}" class="dashboard-brand">
+
+                <div class="brand-mark">
+                    CP
+                </div>
+
+                <div>
+
+                    <div class="brand-title">
+                        CAREER PLANNER
+                    </div>
+
+                    <div class="brand-subtitle">
+                        PLAN TODAY · ACHIEVE TOMORROW
+                    </div>
+
+                </div>
+
+            </a>
+
+
+            <nav class="sidebar-nav">
+
+                <a href="{{ url_for('dashboard') }}">
+                    <span class="nav-icon">▦</span>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="{{ url_for('dashboard_profile') }}">
+                    <span class="nav-icon">♙</span>
+                    <span>Profile</span>
+                </a>
+
+                <a href="{{ url_for('dashboard_roadmap') }}">
+                    <span class="nav-icon">◇</span>
+                    <span>Roadmap</span>
+                </a>
+
+                <a href="{{ url_for('dashboard_schedule') }}">
+                    <span class="nav-icon">□</span>
+                    <span>Schedule</span>
+                </a>
+
+                <a href="{{ url_for('dashboard_internships') }}">
+                    <span class="nav-icon">↗</span>
+                    <span>Internships</span>
+                </a>
+
+                <a href="{{ url_for('dashboard_resources') }}">
+                    <span class="nav-icon">◈</span>
+                    <span>Resources</span>
+                </a>
+
+                <a href="{{ url_for('dashboard_ai_mentor') }}">
+                    <span class="nav-icon">✦</span>
+                    <span>AI Mentor</span>
+                </a>
+
+                <a href="{{ url_for('dashboard_achievements') }}">
+                    <span class="nav-icon">♕</span>
+                    <span>Achievements</span>
+                </a>
+
+                <a href="{{ url_for('dashboard_settings') }}">
+                    <span class="nav-icon">⚙</span>
+                    <span>Settings</span>
+                </a>
+
+                <a href="{{ url_for('logout') }}">
+                    <span class="nav-icon">↪</span>
+                    <span>Logout</span>
+                </a>
+
+            </nav>
+
+        </aside>
+
+
+        <main class="dashboard-main">
+
+            {% block content %}
+            {% endblock %}
+
+        </main>
+
+    </div>
+
+</body>
+
+</html>

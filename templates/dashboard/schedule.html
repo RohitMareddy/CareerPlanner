@@ -1,0 +1,253 @@
+{% extends "dashboard/base.html" %}
+
+{% block title %}
+Schedule | Career Planner
+{% endblock %}
+
+{% block content %}
+
+<header class="page-header">
+    <div>
+
+        <div class="page-kicker">
+            PERSONALIZED SCHEDULE
+        </div>
+
+        <h1>
+            Your weekly timetable.
+        </h1>
+
+        <p>
+            Your schedule is generated around your college
+            hours, study availability, academic subjects,
+            and career-focused skill development.
+        </p>
+
+    </div>
+</header>
+
+
+<!-- ======================================================
+     AVAILABILITY
+====================================================== -->
+
+<section class="panel">
+
+    <div class="panel-title">
+
+        <h2>Availability</h2>
+
+        <span>
+            {{ availability.study_hours }} hours/day target
+        </span>
+
+    </div>
+
+
+    <div class="grid grid-3">
+
+        <div class="info-card">
+
+            <small>
+                College
+            </small>
+
+            <strong>
+                {{ availability.college_start }}
+                –
+                {{ availability.college_end }}
+            </strong>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <small>
+                Study Window
+            </small>
+
+            <strong>
+                {{ availability.study_start }}
+                –
+                {{ availability.study_end }}
+            </strong>
+
+        </div>
+
+
+        <div class="info-card">
+
+            <small>
+                Weekend
+            </small>
+
+            <strong>
+                {{ availability.weekend_mode|title }}
+            </strong>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     WEEKLY SCHEDULE
+====================================================== -->
+
+{% for day, day_schedule in schedule.items() %}
+
+<section class="panel">
+
+    <div class="panel-title">
+
+        <h2>
+            {{ day }}
+        </h2>
+
+        <span>
+            Personalized schedule
+        </span>
+
+    </div>
+
+
+    <div class="timeline">
+
+        {% for slot in day_schedule %}
+
+        <div class="timeline-item">
+
+            <div class="timeline-time">
+                {{ slot.time }}
+            </div>
+
+
+            <div class="timeline-dot"></div>
+
+
+            <div class="timeline-content">
+
+                <strong>
+                    {{ slot.title }}
+                </strong>
+
+
+                {% if slot.kind == "college" %}
+
+                <p>
+                    College / academic time
+                </p>
+
+
+                {% elif slot.kind == "study" %}
+
+                <p>
+                    Focused academic study block
+                </p>
+
+
+                {% elif slot.kind == "skills" %}
+
+                <p>
+                    {{ slot.description }}
+                </p>
+
+
+                <a href="{{ slot.resource_url }}" class="schedule-resource-btn">
+                    Explore Resources
+                    <span>→</span>
+                </a>
+
+                {% endif %}
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+{% endfor %}
+
+
+<!-- ======================================================
+     SUBJECTS
+====================================================== -->
+
+<section class="panel">
+
+    <div class="panel-title">
+
+        <h2>
+            Subjects Used
+        </h2>
+
+        <span>
+            From your academic profile
+        </span>
+
+    </div>
+
+
+    <div class="grid grid-3">
+
+        {% for subject in subjects %}
+
+        <div class="info-card">
+
+            <strong>
+                {{ subject }}
+            </strong>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</section>
+
+
+<!-- ======================================================
+     SMALL PAGE-SPECIFIC STYLE
+====================================================== -->
+
+<style>
+    .schedule-resource-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+
+        margin-top: 12px;
+
+        padding: 9px 15px;
+
+        border-radius: 10px;
+
+        text-decoration: none;
+
+        font-size: 13px;
+        font-weight: 600;
+
+        transition:
+            transform 0.2s ease,
+            opacity 0.2s ease;
+    }
+
+    .schedule-resource-btn:hover {
+        transform: translateY(-2px);
+        opacity: 0.9;
+    }
+
+    .schedule-resource-btn span {
+        font-size: 16px;
+    }
+</style>
+
+{% endblock %}
