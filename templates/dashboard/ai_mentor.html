@@ -1532,6 +1532,174 @@
             border: 0;
             margin: 14px 0;
         }
+
+        .ai-message h2,
+        .ai-message h3,
+        .ai-message h4 {
+            margin: 14px 0 8px;
+            line-height: 1.35;
+        }
+
+        .ai-message h2 {
+            font-size: 20px;
+        }
+
+        .ai-message h3 {
+            font-size: 17px;
+        }
+
+        .ai-message h4 {
+            font-size: 15px;
+        }
+
+        .ai-message strong {
+            font-weight: 700;
+        }
+
+        .ai-message em {
+            font-style: italic;
+        }
+
+        .ai-message ul {
+            margin: 8px 0;
+            padding-left: 22px;
+        }
+
+        .ai-message li {
+            margin: 6px 0;
+        }
+
+        .ai-message hr {
+            border: 0;
+            margin: 16px 0;
+        }
+
+        .ai-message code {
+            padding: 2px 6px;
+            border-radius: 5px;
+            font-family: Consolas, monospace;
+        }
+
+        .ai-message pre {
+            overflow-x: auto;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .ai-message pre code {
+            padding: 0;
+        }
+
+        .ai-message table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 12px 0;
+            font-size: 13px;
+        }
+
+        .ai-message th,
+        .ai-message td {
+            padding: 8px 10px;
+            text-align: left;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            vertical-align: top;
+        }
+
+        .ai-message th {
+            font-weight: 700;
+        }
+
+        .ai-message h2,
+        .ai-message h3,
+        .ai-message h4 {
+            margin: 16px 0 10px;
+            line-height: 1.35;
+        }
+
+        .ai-message h2 {
+            font-size: 21px;
+        }
+
+        .ai-message h3 {
+            font-size: 18px;
+        }
+
+        .ai-message h4 {
+            font-size: 16px;
+        }
+
+        .ai-message strong {
+            font-weight: 700;
+        }
+
+        .ai-message em {
+            font-style: italic;
+        }
+
+        .ai-message ul {
+            margin: 8px 0 12px;
+            padding-left: 22px;
+        }
+
+        .ai-message li {
+            margin: 5px 0;
+        }
+
+        .ai-message hr {
+            border: 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            margin: 16px 0;
+        }
+
+        .ai-message code {
+            font-family: Consolas, Monaco, monospace;
+            padding: 2px 6px;
+            border-radius: 5px;
+        }
+
+        .ai-message pre {
+            overflow-x: auto;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 12px 0;
+        }
+
+        .ai-message pre code {
+            padding: 0;
+        }
+
+        .ai-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 14px 0;
+            font-size: 14px;
+            overflow: hidden;
+        }
+
+        .ai-table th,
+        .ai-table td {
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 9px 10px;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        .ai-table th {
+            font-weight: 700;
+        }
+
+        .chat-messages {
+            position: relative;
+            background-image: linear-gradient(rgba(5, 8, 20, 0.78),
+                rgba(5, 8, 20, 0.78)),
+            url("{{ url_for('static', filename='images/jarvis-bg.jpg') }}");
+
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: local;
+        }
     </style>
 
 </head>
@@ -2053,155 +2221,295 @@
                 "aiChatMessages"
             );
 
-        function formatAIResponse(message) {
+        function formatAIMessage(message) {
 
             if (!message) {
                 return "";
             }
 
-            let formatted = String(message);
+            let text = String(message);
 
-            /*
-             * Escape HTML first so AI-generated text cannot
-             * accidentally inject HTML/JavaScript.
-             */
-            formatted = formatted
+            /* -----------------------------------------
+               CLEAN AI OUTPUT
+            ----------------------------------------- */
+
+            // Remove unnecessary escaping produced by the model
+            text = text
+                .replace(/\\\|/g, "|")
+                .replace(/\\-/g, "-")
+                .replace(/\\#/g, "#")
+                .replace(/\\\*/g, "*")
+                .replace(/\\`/g, "`");
+
+            // Convert escaped horizontal rules
+            text = text.replace(/^\\---$/gm, "---");
+
+            /* -----------------------------------------
+               ESCAPE HTML
+            ----------------------------------------- */
+
+            text = text
                 .replace(/&/g, "&amp;")
                 .replace(/</g, "&lt;")
                 .replace(/>/g, "&gt;");
-            formatted = formatted.replace(
-                /&lt;br\s*\/?&gt;/gi,
-                "<br>"
+
+            /* -----------------------------------------
+               CODE BLOCKS
+            ----------------------------------------- */
+
+            text = text.replace(
+                /```([\s\S]*?)```/g,
+                function (match, code) {
+                    return "<pre><code>" + code.trim() + "</code></pre>";
+                }
             );
 
-            /*
-             * Headings
-             */
-            formatted = formatted.replace(
+            /* -----------------------------------------
+               TABLES
+            ----------------------------------------- */
+
+            const lines = text.split("\n");
+            let output = [];
+            let i = 0;
+
+            while (i < lines.length) {
+
+                const current = lines[i].trim();
+
+                /*
+                 * Detect Markdown table:
+                 *
+                 * | A | B |
+                 * |---|---|
+                 * | X | Y |
+                 */
+
+                if (
+                    current.startsWith("|") &&
+                    i + 1 < lines.length &&
+                    /^\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)+\|?$/.test(
+                        lines[i + 1].trim()
+                    )
+                ) {
+
+                    const headerCells =
+                        current
+                            .replace(/^\|/, "")
+                            .replace(/\|$/, "")
+                            .split("|")
+                            .map(cell => cell.trim());
+
+                    i += 2;
+
+                    let rows = [];
+
+                    while (
+                        i < lines.length &&
+                        lines[i].trim().startsWith("|")
+                    ) {
+
+                        const row =
+                            lines[i]
+                                .trim()
+                                .replace(/^\|/, "")
+                                .replace(/\|$/, "")
+                                .split("|")
+                                .map(cell => cell.trim());
+
+                        rows.push(row);
+
+                        i++;
+                    }
+
+                    let table = "<table class='ai-table'><thead><tr>";
+
+                    headerCells.forEach(cell => {
+                        table += "<th>" + cell + "</th>";
+                    });
+
+                    table += "</tr></thead><tbody>";
+
+                    rows.forEach(row => {
+
+                        table += "<tr>";
+
+                        row.forEach(cell => {
+                            table += "<td>" + cell + "</td>";
+                        });
+
+                        table += "</tr>";
+                    });
+
+                    table += "</tbody></table>";
+
+                    output.push(table);
+
+                    continue;
+                }
+
+                output.push(lines[i]);
+
+                i++;
+            }
+
+            text = output.join("\n");
+
+            /* -----------------------------------------
+               HEADINGS
+            ----------------------------------------- */
+
+            text = text.replace(
                 /^### (.*)$/gm,
                 "<h4>$1</h4>"
             );
 
-            formatted = formatted.replace(
+            text = text.replace(
                 /^## (.*)$/gm,
                 "<h3>$1</h3>"
             );
 
-            formatted = formatted.replace(
+            text = text.replace(
                 /^# (.*)$/gm,
                 "<h2>$1</h2>"
             );
 
-            /*
-             * Bold
-             */
-            formatted = formatted.replace(
+            /* -----------------------------------------
+               BOLD
+            ----------------------------------------- */
+
+            text = text.replace(
                 /\*\*(.*?)\*\*/g,
                 "<strong>$1</strong>"
             );
 
-            /*
-             * Italic
-             */
-            formatted = formatted.replace(
+            /* -----------------------------------------
+               ITALIC
+            ----------------------------------------- */
+
+            text = text.replace(
                 /(?<!\*)\*([^*\n]+)\*(?!\*)/g,
                 "<em>$1</em>"
             );
 
-            /*
-             * Inline code
-             */
-            formatted = formatted.replace(
-                /`([^`]+)`/g,
+            /* -----------------------------------------
+               INLINE CODE
+            ----------------------------------------- */
+
+            text = text.replace(
+                /`([^`\n]+)`/g,
                 "<code>$1</code>"
             );
 
-            /*
-             * Bullet points
-             */
-            formatted = formatted.replace(
-                /^[•*-]\s+(.*)$/gm,
+            /* -----------------------------------------
+               BULLET POINTS
+            ----------------------------------------- */
+
+            text = text.replace(
+                /^[ \t]*[-*] (.*)$/gm,
                 "<li>$1</li>"
             );
 
-            /*
-             * Numbered lists
-             */
-            formatted = formatted.replace(
-                /^\d+\.\s+(.*)$/gm,
+            /* -----------------------------------------
+               NUMBERED LISTS
+            ----------------------------------------- */
+
+            text = text.replace(
+                /^[ \t]*\d+\.\s+(.*)$/gm,
                 "<li>$1</li>"
             );
 
-            /*
-             * Convert groups of <li> into lists.
-             */
-            formatted = formatted.replace(
-                /((?:<li>.*?<\/li>\s*)+)/gs,
-                "<ul>$1</ul>"
-            );
+            /* -----------------------------------------
+               HORIZONTAL RULE
+            ----------------------------------------- */
 
-            /*
-             * Horizontal separators
-             */
-            formatted = formatted.replace(
-                /^---+$/gm,
+            text = text.replace(
+                /^---$/gm,
                 "<hr>"
             );
 
-            /*
-             * Line breaks
-             */
-            formatted = formatted.replace(
-                /\n{2,}/g,
-                "<br><br>"
-            );
+            /* -----------------------------------------
+               LINE BREAKS
+            ----------------------------------------- */
 
-            formatted = formatted.replace(
+            text = text.replace(
                 /\n/g,
                 "<br>"
             );
 
-            return formatted;
+            /* -----------------------------------------
+               CLEAN LIST FORMATTING
+            ----------------------------------------- */
+
+            text = text.replace(
+                /(<li>.*?<\/li>(?:<br>)?)+/gs,
+                function (match) {
+
+                    const cleaned =
+                        match.replace(/<br>/g, "");
+
+                    return "<ul>" + cleaned + "</ul>";
+                }
+            );
+
+            /* -----------------------------------------
+               CLEAN HEADING SPACING
+            ----------------------------------------- */
+
+            text = text.replace(
+                /<br><h([234])>/g,
+                "<h$1>"
+            );
+
+            text = text.replace(
+                /<\/h([234])><br>/g,
+                "</h$1>"
+            );
+
+            return text;
         }
         /* ==================================================
            ADD MESSAGE
         ================================================== */
 
-        function addMessage(
-            message,
-            sender
-        ) {
+        function addMessage(message, sender) {
 
-            const messageElement =
-                document.createElement(
-                    "div"
-                );
-
+            const messageElement = document.createElement("div");
 
             messageElement.className =
                 sender === "user"
                     ? "chat-message user-message"
                     : "chat-message ai-message";
 
-
             if (sender === "ai") {
-                messageElement.innerHTML = formatAIResponse(message);
+
+                // Convert basic Markdown formatting to HTML
+                let formattedMessage = message
+                    .replace(/&/g, "&amp;")
+                    .replace(/</g, "&lt;")
+                    .replace(/>/g, "&gt;");
+
+                formattedMessage = formattedMessage
+                    .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+                    .replace(/\*(.*?)\*/g, "<em>$1</em>")
+                    .replace(/^### (.*)$/gm, "<h4>$1</h4>")
+                    .replace(/^## (.*)$/gm, "<h3>$1</h3>")
+                    .replace(/^# (.*)$/gm, "<h2>$1</h2>")
+                    .replace(/^- (.*)$/gm, "• $1")
+                    .replace(/\n/g, "<br>");
+
+                messageElement.innerHTML = formattedMessage;
+
             } else {
+
                 messageElement.textContent = message;
+
             }
 
-
-            chatMessages.appendChild(
-                messageElement
-            );
-
+            chatMessages.appendChild(messageElement);
 
             chatMessages.scrollTop =
                 chatMessages.scrollHeight;
-
         }
-
-
         /* ==================================================
            TYPING INDICATOR
         ================================================== */
@@ -2490,99 +2798,7 @@
 
                 }
             );
-        async function loadChatHistory() {
 
-            try {
-
-                const response = await fetch(
-                    "/api/ai-mentor/history",
-                    {
-                        method: "GET",
-                        credentials: "same-origin"
-                    }
-                );
-
-                if (!response.ok) {
-
-                    console.error(
-                        "JARVIS history request failed:",
-                        response.status
-                    );
-
-                    return;
-                }
-
-                const data = await response.json();
-
-                if (!data.success) {
-
-                    console.error(
-                        "Could not load JARVIS history:",
-                        data.error || "Unknown error"
-                    );
-
-                    return;
-                }
-
-                /*
-                 * IMPORTANT:
-                 * Use the SAME container as the live chat.
-                 */
-                const chatMessages =
-                    document.getElementById(
-                        "aiChatMessages"
-                    );
-
-                if (!chatMessages) {
-
-                    console.error(
-                        "aiChatMessages element not found."
-                    );
-
-                    return;
-                }
-
-                /*
-                 * Remove the existing welcome/placeholder
-                 * messages before restoring saved history.
-                 */
-                chatMessages.innerHTML = "";
-
-                data.messages.forEach(function (message) {
-
-                    /*
-                     * Use the EXISTING live-chat function.
-                     *
-                     * This keeps the exact same styling
-                     * for old and new messages.
-                     */
-                    addMessage(
-                        message.content,
-                        message.role === "user"
-                            ? "user"
-                            : "ai"
-                    );
-
-                });
-
-                /*
-                 * Scroll to latest message.
-                 */
-                chatMessages.scrollTop =
-                    chatMessages.scrollHeight;
-
-            }
-
-            catch (error) {
-
-                console.error(
-                    "JARVIS history error:",
-                    error
-                );
-
-            }
-
-        }
 
 
 

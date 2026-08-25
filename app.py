@@ -1207,29 +1207,7 @@ def dashboard(view):
     context = dashboard_context(view)
     return render_template("dashboard/dashboard.html", **context)
 
-@app.route("/api/ai-mentor/history", methods=["GET"])
-@login_required
-def ai_mentor_history():
 
-    messages = (
-        MentorChatMessage.query
-        .filter_by(user_id=current_user.id)
-        .order_by(MentorChatMessage.created_at.asc())
-        .all()
-    )
-
-    return {
-        "success": True,
-        "messages": [
-            {
-                "id": message.id,
-                "role": message.role,
-                "content": message.content,
-                "created_at": message.created_at.isoformat()
-            }
-            for message in messages
-        ]
-    }
 # ==========================================================
 # AI MENTOR CHAT API
 # ==========================================================
@@ -1249,38 +1227,17 @@ def ai_mentor_chat():
                 "error": "Please enter a message."
             }, 400
 
-        # --------------------------------------------------
-        # 1. SAVE USER MESSAGE
-        # --------------------------------------------------
-
-        user_chat = MentorChatMessage(
-            user_id=current_user.id,
-            role="user",
-            content=user_message
-        )
-
-        db.session.add(user_chat)
-        db.session.commit()
-
-        # --------------------------------------------------
-        # 2. LOAD PREVIOUS CONVERSATION
-        # --------------------------------------------------
-
-        previous_messages = (
-            MentorChatMessage.query
-            .filter_by(user_id=current_user.id)
-            .order_by(MentorChatMessage.created_at.asc())
-            .all()
-        )
-
-        # Keep the conversation reasonably sized for the AI
-        recent_messages = previous_messages[-40:]
+        # ==================================================
+        # JARVIS CONVERSATION
+        # ==================================================
+        # Fresh conversation every time.
+        # No previous chat history is loaded or sent to Groq.
 
         conversation = []
 
-        # --------------------------------------------------
-        # 3. JARVIS SYSTEM PROMPT
-        # --------------------------------------------------
+        # ==================================================
+        # STUDENT INFORMATION
+        # ==================================================
 
         profile = current_user.profile
 
@@ -1293,12 +1250,16 @@ def ai_mentor_chat():
             for skill in skills
         ]
 
+        # ==================================================
+        # JARVIS SYSTEM PROMPT
+        # ==================================================
+
         system_prompt = f"""
 You are JARVIS, the personal AI career mentor inside Career Planner.
 
-You are helping the student continuously throughout their academic and career journey.
+You are helping this student with their academic and career journey.
 
-Student information:
+STUDENT INFORMATION:
 
 Name: {profile.full_name}
 College: {profile.college}
@@ -1309,19 +1270,37 @@ Career Goal: {profile.career_goal}
 Skills:
 {", ".join(skill_names) if skill_names else "No skills mapped yet."}
 
-Your responsibilities:
+YOUR RESPONSIBILITIES:
 
 1. Give practical and personalized career guidance.
-2. Remember the conversation context.
-3. Consider the student's existing skills and career goal.
-4. Avoid generic advice when personalized advice is possible.
-5. Help with programming, DSA, projects, internships, resumes,
-   interview preparation and career planning.
-6. If the student asks what they should do next, give clear actionable steps.
-7. Keep answers understandable for a college student.
-8. Do not pretend to have completed actions that you have not completed.
-9. Maintain continuity with the previous conversation.
-10. Your name is JARVIS.
+2. Consider the student's existing skills and career goal.
+3. Avoid generic advice when personalized advice is possible.
+4. Help with programming, DSA, projects, internships,
+   resumes, interviews and career planning.
+5. If the student asks what they should do next,
+   give clear actionable steps.
+6. Keep answers understandable for a college student.
+7. Do not pretend to have completed actions that you have not completed.
+8. Your name is JARVIS.
+
+RESPONSE STYLE:
+
+- Be concise and directly answer the question.
+- Usually give 1-4 short paragraphs or 3-6 bullet points.
+- Do not repeat the user's question.
+- Avoid unnecessary introductions and conclusions.
+- Avoid unnecessary tables.
+- Use bullets when they make the answer easier to understand.
+- If the student asks for detailed, complete, full, or step-by-step
+  guidance, provide more detail.
+- Keep the response within approximately 500 tokens.
+- Never intentionally produce a very long response.
+
+IMPORTANT:
+
+This is a fresh conversation.
+Do NOT assume you remember previous conversations with the student.
+Use only the student information provided above and the current message.
 
 Answer naturally and conversationally.
 """
@@ -1331,20 +1310,18 @@ Answer naturally and conversationally.
             "content": system_prompt
         })
 
-        # --------------------------------------------------
-        # 4. ADD DATABASE CONVERSATION
-        # --------------------------------------------------
+        # ==================================================
+        # CURRENT USER MESSAGE
+        # ==================================================
 
-        for message in recent_messages:
+        conversation.append({
+            "role": "user",
+            "content": user_message
+        })
 
-            conversation.append({
-                "role": message.role,
-                "content": message.content
-            })
-
-        # --------------------------------------------------
-        # 5. SEND TO GROQ
-        # --------------------------------------------------
+        # ==================================================
+        # GROQ
+        # ==================================================
 
         if groq_client is None:
             return {
@@ -1356,8 +1333,12 @@ Answer naturally and conversationally.
             model="openai/gpt-oss-120b",
             messages=conversation,
             temperature=0.7,
-            max_tokens=1200
+            max_tokens=500
         )
+
+        # ==================================================
+        # GET JARVIS RESPONSE
+        # ==================================================
 
         assistant_message = (
             completion.choices[0]
@@ -1366,22 +1347,15 @@ Answer naturally and conversationally.
             .strip()
         )
 
-        # --------------------------------------------------
-        # 6. SAVE JARVIS RESPONSE
-        # --------------------------------------------------
+        if not assistant_message:
+            return {
+                "success": False,
+                "error": "JARVIS returned an empty response."
+            }, 500
 
-        assistant_chat = MentorChatMessage(
-            user_id=current_user.id,
-            role="assistant",
-            content=assistant_message
-        )
-
-        db.session.add(assistant_chat)
-        db.session.commit()
-
-        # --------------------------------------------------
-        # 7. RETURN RESPONSE TO FRONTEND
-        # --------------------------------------------------
+        # ==================================================
+        # RETURN TO FRONTEND
+        # ==================================================
 
         return {
             "success": True,
@@ -1390,15 +1364,16 @@ Answer naturally and conversationally.
 
     except Exception as e:
 
-        db.session.rollback()
-
-        print("JARVIS CHAT ERROR:", repr(e))
+        print("\n===================================")
+        print("JARVIS ERROR")
+        print("===================================")
+        print(repr(e))
+        print("===================================\n")
 
         return {
             "success": False,
             "error": "I couldn't connect to JARVIS right now. Please try again."
-        }, 500
-# ==========================================================
+        }, 500# ==========================================================
 # LOGOUT
 # ==========================================================
 @app.route("/logout")
